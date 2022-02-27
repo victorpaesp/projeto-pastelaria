@@ -1,0 +1,15 @@
+* {
+    padding: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+    font-family: Roboto;
+    color: #A03400;
+}
+
+input {      
+    color: #A03400;
+}
+
+a {
+    text-decoration: none;
+}
