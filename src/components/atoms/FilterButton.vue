@@ -90,5 +90,4 @@ export default {
     label:hover {
         background-color: #9a2a2a;
     }
-    
 </style>

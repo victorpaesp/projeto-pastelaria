@@ -81,9 +81,6 @@
                     <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
                     <input type="text" class="sabor-update" v-model="comida.sabor">            
                     <input type="text" class="descricao-update" v-model="comida.descricao">
-                    <div class="dropbox">
-                        <input type="file" accept="image/*" class="file-update" @change="previewImage" />
-                    </div>
                     <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
                     <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
                 </div>
@@ -193,7 +190,7 @@ export default {
         createItem() {
             if (this.titulo && this.sabor && this.preco != '0,00') {
                 db.collection("cardapio")
-                .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem, editar: this.editar})
+                .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem})
                 .then(() => {
                     console.log("Item criado");
                     this.readItem();
@@ -243,18 +240,13 @@ export default {
                 titulo: item.titulo,
                 sabor: item.sabor,
                 preco: item.preco,
-                descricao: item.descricao,
-                imagem: item.imgItem,
-                editar: 'not-editing'
+                descricao: item.descricao
               })
               .then(() => {
                 console.log("Document successfully updated!");
                 this.readItem();                
                 this.editar = !this.editar  
               })
-              .catch((error) => {
-                console.error("Error updating document: ", error);
-              });
         },
         deleteItem(id) {
             this.$swal({
@@ -277,9 +269,6 @@ export default {
                       console.log("Item deletado");
                       this.readItem();
                   })
-                  .catch((error) => {
-                      console.error("Error removing document: ", error);
-                  });
                 } 
             })
         },
@@ -308,9 +297,6 @@ export default {
                         console.log(doc.id, " => ", doc.data());
                         });
                     })
-                    .catch((error) => {
-                      console.log("Error getting documents: ", error);
-                    });
                     break;
 
                 case "food":
@@ -331,9 +317,6 @@ export default {
                             console.log(doc.id, " => ", doc.data());
                         });
                     })
-                    .catch((error) => {
-                        console.log("Error getting documents: ", error);
-                    });
                     break;
 
                 case "drink":
@@ -354,9 +337,6 @@ export default {
                             console.log(doc.id, " => ", doc.data());
                         });
                     })
-                    .catch((error) => {
-                        console.log("Error getting documents: ", error);
-                    });
                     break;
 
                 default:
@@ -640,19 +620,6 @@ export default {
         left: 110px;
         width: 500px;
     }
-
-    .file-update {
-        position: absolute;
-        top: 50%;
-        left: -110px;
-        transform: translate(0%, -50%);
-        width: 180px;
-        height: 180px;
-        background-color: #FFF;
-        border-radius: 10px;
-        cursor: pointer;
-        opacity: 0;
-      }
 
     .save-btn {
         position: absolute;
