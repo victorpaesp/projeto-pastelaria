@@ -192,7 +192,7 @@ export default {
 //--------------- Métodos CRUD
         createItem() {
             if (this.titulo && this.sabor && this.preco != '0,00') {
-                db.collection("comidas")
+                db.collection("cardapio")
                 .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem, editar: this.editar})
                 .then(() => {
                     console.log("Item criado");
@@ -219,7 +219,7 @@ export default {
             this.$refs.formpastel.reset();
         },
         editItem(id) {
-            db.collection("comidas")
+            db.collection("cardapio")
               .doc(id)
               .update({
                 editar: this.editar
@@ -227,16 +227,17 @@ export default {
               this.editar = !this.editar;
         }, 
         cancelEdit(id) {
-            db.collection("comidas")
+            db.collection("cardapio")
               .doc(id)
               .update({
                 editar: !this.editar
               })
-              this.editar = !this.editar
+              this.editar = !this.editar              
+              this.readItem();
         },
         saveEdit(item) {
           const id = item.id
-            db.collection("comidas")
+            db.collection("cardapio")
               .doc(id)
               .update({
                 titulo: item.titulo,
@@ -248,6 +249,8 @@ export default {
               })
               .then(() => {
                 console.log("Document successfully updated!");
+                this.readItem();                
+                this.editar = !this.editar  
               })
               .catch((error) => {
                 console.error("Error updating document: ", error);
@@ -267,7 +270,7 @@ export default {
               })
             .then((result) => {
                 if(result.value) {
-                  db.collection("comidas")
+                  db.collection("cardapio")
                   .doc(id)
                   .delete()
                   .then(() => {
@@ -289,7 +292,7 @@ export default {
 
                 case "all": 
                     this.comidasData = [];
-                    db.collection("comidas")
+                    db.collection("cardapio")
                     .get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
@@ -312,7 +315,7 @@ export default {
 
                 case "food":
                     this.comidasData = [];
-                    db.collection("comidas").where("itemTipo", "==", "Comida")
+                    db.collection("cardapio").where("itemTipo", "==", "Comida")
                     .get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
@@ -335,7 +338,7 @@ export default {
 
                 case "drink":
                     this.comidasData = [];
-                    db.collection("comidas").where("itemTipo", "==", "Bebida")
+                    db.collection("cardapio").where("itemTipo", "==", "Bebida")
                     .get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
@@ -696,7 +699,7 @@ export default {
         padding-left: 5px;
         font: normal normal normal 16px/18px Roboto;
     }
-    
+
 /*--------------- INPUT FILE --------------- */
     .dropbox {
         height: 100%;
