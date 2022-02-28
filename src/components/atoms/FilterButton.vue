@@ -53,7 +53,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .filter-btn {
         position: absolute;
         top: 860px;
@@ -61,7 +61,6 @@ export default {
         z-index: 1;
         width: 350px;
         margin: 20px auto;
-        padding: 15px 20px;
         border-radius: 8px;
         display: flex;
         justify-content: space-between;
@@ -70,7 +69,8 @@ export default {
 
     label {
         cursor: pointer;
-        color: #fff;
+        color: #fff;        
+        padding: 15px 20px;
     }
 
     .filter-btn input {
