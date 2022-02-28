@@ -1,24 +1,23 @@
-# pastelaria
+# Pastel de Ideias
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/89036524/155906850-4f0fe3c2-5e6c-414b-928b-4f8ea0b63a6d.png" />
+</p>
+            
+## Opção 1 - Iniciando o projeto localmente
 
-## Project setup
+### Passo 1
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+### Passo 2
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Opção 2 - Acessando o projeto no Heroku
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Clique no link abaixo
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://projeto-pastelaria.herokuapp.com/
+
+Pronto! Basta utilizar a aplicação
