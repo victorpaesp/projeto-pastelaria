@@ -3,17 +3,17 @@
             <label for="all">
                 <input type="radio" name="radio" value="all" id="all" checked="checked"
                 @change="$emit('input', 'all')" />
-                Mostrar tudo
+                <span>Mostrar tudo</span>
             </label>
             <label for="food">
                 <input type="radio" name="radio" value="food" id="food" 
                 @change="$emit('input', 'food')" />
-                Comidas</label
-            >
+                <span>Comidas</span>
+            </label>
             <label for="drink">
                 <input type="radio" name="radio" value="drink" id="drink"
                 @change="$emit('input', 'drink')" />
-                Bebidas
+                <span>Bebidas</span>
             </label>
     </div>
 </template>
@@ -71,14 +71,24 @@ export default {
         cursor: pointer;
         color: #fff;        
         padding: 15px 20px;
+        border-radius: 8px;
     }
 
-    .filter-btn input {
+    label span {
+        color: #FFF;
+    }
+
+    label input:checked + span {
+        font-weight: 900;
+        font-size: 18px;
+    }
+
+    input {
         display: none;
     }
 
-    :checked + label {
-        font-weight: 900;
+    label:hover {
+        background-color: #9a2a2a;
     }
     
 </style>

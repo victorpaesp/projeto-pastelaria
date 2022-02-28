@@ -1,12 +1,13 @@
 <template>
     <div>
-        <!-- Formulário -->
+        <!-- Card principal -->
         <div class="form-card">
             <div class="form-header">
                 <p class="text-header">Monte aqui o seu cardápio. O que está esperando?</p> 
                 <p class="switch"><ToggleButton @change="triggerToggleEvent" /></p>
             </div>
 
+            <!-- Formulário -->
             <form onsubmit="event.preventDefault();" id="form-pastel" ref="formpastel"> 
                 <div class="start-row">
                     <Input id="titulo" name="titulo" v-model="titulo" placeholder="Título do pedido" />
@@ -17,7 +18,6 @@
                     <Textarea id="descricao" name="descricao" v-model="descricao" placeholder="Descrição" />
                 </div>
                 <div class="end-row">              
-                <!--   <InputFile id="imagem" name="imagem" v-model="imagem" v-on:previewIMG="previewImage"  /> -->
                     <div class="dropbox">
                         <input type="file" accept="image/*" class="input-file" @change="previewImage" />
                         <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
@@ -58,8 +58,8 @@
                 </div>
             </form>
         </div>
-        <FilterButton @input="readItem" v-model="filtro"/>
 
+        <FilterButton @input="readItem" v-model="filtro"/>
 
         <!-- Card de item adicionado -->
         <div class="card" v-for="comida of comidasData" :key="comida.id">
