@@ -38,8 +38,8 @@
                                   <div class="imagem-item"><img> </div>
                                   <p class="sabor-pedido">Sabor: {{ sabor }}<span class="pedido-res"></span></p>
                                   <p class="descricao-pedido">Descrição: {{ descricao }}<span class="pedido-res"></span></p>         
-                                  <button class="upd" ><i class="bi bi-gear testeta"></i></button>
-                                  <button class="del" >x</button>
+                                  <button class="upd"><i class="bi bi-pencil-square upd-btn"></i></button>
+                                  <button class="del">x</button>
                               </div>
                               <img class="preview" height="180" width="180" :src="imagem">
                               <br>
@@ -73,7 +73,7 @@
                 </div>
                 <p class="sabor-pedido">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
                 <p class="descricao-pedido">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>         
-                <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square testeta"></i></button>
+                <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
 
                 <!-- Área de edição dos itens -->
                 <div class="edit-card" v-if="editar">
@@ -120,7 +120,6 @@ export default {
             sabor: '',
             preco: '',
             descricao: '',
-            imgItem: '',
             comidas: [],
             comidasData: [],   
             errors: [],       
@@ -134,6 +133,7 @@ export default {
             },
             // Dados img
             imageData: null,
+            imgItem: '',
             imagem: ''
         }
     },
@@ -578,6 +578,12 @@ export default {
       align-items: center;
     }
 
+    .upd:hover {
+      border: 1px solid;
+      outline-color: black;
+      outline-offset: 15px;
+    }
+
     #preco {
       padding-left: 40px;
     }
@@ -587,7 +593,8 @@ export default {
       left: 1000px;
       top: 10px;
     }
-    .testeta {
+
+    .upd-btn {
       color: #FFF;
     }
 
