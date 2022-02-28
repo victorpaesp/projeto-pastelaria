@@ -19,14 +19,14 @@
                 </div>
                 <div class="end-row">              
                     <div class="dropbox">
-                        <input type="file" accept="image/*" class="input-file" @change="previewImage" />
+                        <input type="file" accept="image/*" class="input-file" @change="onUpload" />
                         <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
                     </div>
 
                     <!-- Carregamento da prévia de como ficará a imagem no card -->
                     <div v-if="imageData!=null">   
                       <br> 
-                        <a href="#abrirModal">Prévia</a>       
+                        <a href="#abrirModal">{{ imageloading }}</a>       
                         <div class="modal" id="abrirModal"> 
                           <div>
                               <a href="#fechar" title="Fechar" class="fechar">x</a>         
@@ -81,6 +81,9 @@
                     <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
                     <input type="text" class="sabor-update" v-model="comida.sabor">            
                     <input type="text" class="descricao-update" v-model="comida.descricao">
+                    <div class="dropbox-update">
+                        <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                    </div>
                     <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
                     <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
                 </div>
@@ -132,6 +135,7 @@ export default {
               masked: false 
             },
             // Dados img
+            imageloading: 'Carregando...',
             imageData: null,
             imgItem: '',
             imagem: ''
@@ -161,22 +165,17 @@ export default {
         },
 
 //--------------- Métodos upload de imagem
-        previewImage(event) {
-            this.uploadValue = 0;
-            this.imagem = null;
-            this.imageData = event.target.files[0];
-            this.onUpload()
-        },
-        onUpload() {
-            this.imagem = null;
-            const storageRef=storage.ref(`${this.imageData.name}`)
+        onUpload(e) {
+            this.imagem = null;            
+            this.imageData = e.target.files[0];
+            const storageRef = storage.ref(`${this.imageData.name}`)
             .put(this.imageData);
             storageRef
-            .on(`state_changed`,snapshot=>{
+            .on(`state_changed`, snapshot => {
                 this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
                 }, 
                 error => {console.log(error.message)},
-                    ()=>{this.uploadValue=100;
+                    () => {this.uploadValue=100;
                             storageRef.snapshot.ref.getDownloadURL()
                             .then((url)=>{
                                 this.imagem = url;
@@ -240,13 +239,18 @@ export default {
                 titulo: item.titulo,
                 sabor: item.sabor,
                 preco: item.preco,
-                descricao: item.descricao
+                descricao: item.descricao,
+                imgItem: this.imagem
               })
               .then(() => {
-                console.log("Document successfully updated!");
                 this.readItem();                
                 this.editar = !this.editar  
               })
+              
+            this.titulo = "";
+            this.sabor = "";
+            this.imageData = null;
+            this.$refs.formpastel.reset();
         },
         deleteItem(id) {
             this.$swal({
@@ -347,6 +351,11 @@ export default {
     created() {
       this.readItem()
     },  
+    mounted() {
+        setTimeout(() => {
+            this.imageloading = 'Imagem carregada! Veja a prévia'
+        }, 6000);
+    }
 }
 </script>
 
@@ -626,6 +635,30 @@ export default {
         top: 190px;
         left: 110px;
         width: 500px;
+    }
+
+    .input-update {
+        opacity: 0;
+        position: absolute;
+        cursor: pointer;
+        width: 180px;
+        height: 180px;
+    }
+
+    .dropbox-update {   
+        position: absolute;
+        left: -110px;
+        top: 21px;
+        cursor: pointer;  
+        width: 180px;
+        height: 180px;   
+        border: 1px solid #E43636;
+        border-radius: 10px;
+        opacity: 1;
+        font: normal normal normal 15.7px/21px Roboto;
+        display: flex;
+        align-items: center;
+        color: #A03400;
     }
 
     .save-btn {
