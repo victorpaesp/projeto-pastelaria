@@ -81,9 +81,9 @@
                     <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
                     <input type="text" class="sabor-update" v-model="comida.sabor">            
                     <input type="text" class="descricao-update" v-model="comida.descricao">
-                    <div class="dropbox-update">
+                    <!--<div class="dropbox-update">
                         <input type="file" accept="image/*" class="input-update" @change="onUpload" />
-                    </div>
+                    </div>-->
                     <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
                     <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
                 </div>
@@ -240,7 +240,7 @@ export default {
                 sabor: item.sabor,
                 preco: item.preco,
                 descricao: item.descricao,
-                imgItem: this.imagem
+                //imgItem: this.imagem
               })
               .then(() => {
                 this.readItem();                
