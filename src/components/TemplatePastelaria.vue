@@ -1,19 +1,19 @@
 <template>
     <div class="app">
         <Background />
-        <Formulario />    
+        <!--<Formulario />-->    
     </div>
 </template>
 
 <script>
 import Background from '@/components/organisms/Background.vue';
-import Formulario from '@/components/molecules/Formulario.vue';
+//import Formulario from '@/components/molecules/Formulario.vue';
 
 export default {
     name: 'TemplatePastelaria',
     components: {
         Background,
-        Formulario
+       // Formulario
   }
 }
 </script>
@@ -21,9 +21,9 @@ export default {
 <style>
     .app {
         position: relative;
-        top: 0px;
-        left: 8px;
-        width: 1920px;
+        max-width: 1666px;
+        max-height: 10%;
+        height: 100vh;
         background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box;
     }
 </style>
