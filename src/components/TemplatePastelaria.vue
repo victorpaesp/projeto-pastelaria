@@ -1,28 +1,32 @@
 <template>
-    <div class="app">
+    <div class="container-fluid app">
         <Background />
-        <!--<Formulario />-->    
+        <Formulario />  
     </div>
 </template>
 
 <script>
 import Background from '@/components/organisms/Background.vue';
-//import Formulario from '@/components/molecules/Formulario.vue';
+import Formulario from '@/components/molecules/Formulario.vue';
 
 export default {
     name: 'TemplatePastelaria',
     components: {
         Background,
-       // Formulario
+        Formulario
   }
 }
 </script>
 
 <style>
+
+    .container-fluid {
+        max-width: 1666px;
+        
+    }
     .app {
         position: relative;
-        max-width: 1666px;
-        max-height: 10%;
+        width: 100%;
         height: 100vh;
         background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box;
     }

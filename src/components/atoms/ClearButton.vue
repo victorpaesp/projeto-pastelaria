@@ -11,10 +11,10 @@ export default {
 <style>
     .clear-btn {
         position: absolute;
-        top: 290px;
-        left: 353px;
-        width: 200px;
-        height: 60px;
+        top: 92.2%;
+        left: 31.7%;
+        width: 17%;
+        height: 15.2%;
         background: #E43636 0% 0% no-repeat padding-box;
         color: #FFFFFF;
         border: 0;
@@ -23,7 +23,7 @@ export default {
         text-align: center;
         letter-spacing: 0;
         padding-top: 3px;
-        font: normal normal 900 21px/26px Roboto;
+        font: normal normal 900 18px/26px Roboto;
         cursor: pointer;
     }
 

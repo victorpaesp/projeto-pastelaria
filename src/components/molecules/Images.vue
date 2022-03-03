@@ -24,17 +24,19 @@ export default {
 
     .wave {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 50%;
+      height: 50.6%;
       background: url('../../assets/img/wave.png') 0% 0% no-repeat padding-box;
       background-size: 100% 100%;
     }
 
     .logo-header {
       position: absolute;
-      left: 27.5%;
-      top: 11.5%;
-      width: 40%;
-      height: 50%;
+      left: 27.2%;
+      top: 11.2%;
+      width: 38.35%;
+      height: 48.3%;
     }
 </style>

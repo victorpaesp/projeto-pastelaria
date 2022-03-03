@@ -1,27 +1,73 @@
 <template>
     <div>
-        <!-- Card principal -->
+
         <div class="form-card">
-            <div class="form-header">
-                <p class="text-header">Monte aqui o seu cardápio. O que está esperando?</p> 
-                <p class="switch"><ToggleButton @change="triggerToggleEvent" /></p>
+            <div class="row d-flex flex-wrap-reverse testetaa">
+                <div class="col-sm-9 text-header mb-2">                        
+                    Monte aqui o seu cardápio. O que está esperando?                
+                </div>
+                <div class="col-sm-3 align-self-center testa">
+                    <ToggleButton @change="triggerToggleEvent" />                
+                </div>
             </div>
 
-            <!-- Formulário -->
-            <form onsubmit="event.preventDefault();" id="form-pastel" ref="formpastel"> 
-                <div class="start-row">
-                    <Input id="titulo" name="titulo" v-model="titulo" placeholder="Título do pedido" />
-                    <Input id="sabor"  name="sabor"  v-model="sabor"  placeholder="Sabor"/>
-                    <Input id="preco"  name="preco"  v-model="preco" v-money="money" /> <div class="reais">R$</div>
-                </div>
-                <div class="middle-row">
-                    <Textarea id="descricao" name="descricao" v-model="descricao" placeholder="Descrição" />
-                </div>
-                <div class="end-row">              
-                    <div class="dropbox">
-                        <input type="file" accept="image/*" class="input-file" @change="onUpload" />
-                        <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
+
+
+            <form class="testef" onsubmit="event.preventDefault();" ref="formpastel">                
+
+                <div class="row">
+                    <div class="col-xl-5">
+                        <div class="form-group">
+                            <Input id="titulo" class="form-control" name="titulo" v-model="titulo" placeholder="Título do pedido" />
+                        </div>
                     </div>
+                    <div class="col-xl-5">        
+                        <div class="form-group">
+                            <Input id="sabor"  class="form-control" name="sabor"  v-model="sabor"  placeholder="Sabor"/>
+                        </div>
+                    </div>
+                    <div class="col-xl">
+                        <div class="form-group">
+                            <Input id="preco"  class="form-control" name="preco" v-model="preco" v-money="money" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="form-group">
+                            <Textarea id="descricao" name="descricao" class="form-control" v-model="descricao" placeholder="Descrição" />
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="form-group dropbox"> 
+                                <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />
+                                <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
+                           
+                        </div> 
+                    </div>
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     <!-- Carregamento da prévia de como ficará a imagem no card -->
                     <div v-if="imageData!=null">   
@@ -56,8 +102,7 @@
                         <p v-for="error in errors" :key="error">{{ error }}</p> 
                     </div>
                 </div>
-            </form>
-        </div>
+            </form></div>
 
         <FilterButton @input="readItem" v-model="filtro"/>
 
@@ -131,6 +176,7 @@ export default {
             money: {
               decimal: ',',
               thousands: '.',
+              prefix: 'R$ ',
               precision: 2,
               masked: false 
             },
@@ -362,12 +408,28 @@ export default {
 <style>
 
 /*--------------- FORM --------------- */
-    #form-pastel {
+    .form-pastel {
         position: absolute;
-        width: 1140px;
-        top: 73.5px;
-        left: 20px;
+        width: 96%;
+        top: 19%;
+        left: 2%;
         z-index: 2;
+    }
+
+    .testetaa {
+        min-width: 307px
+    }
+
+    .testa {
+        text-align: center;
+    }
+
+    .form-teste {
+        position: absolute;
+        top: 20%;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 
     .start-row {
@@ -390,43 +452,40 @@ export default {
 
     input::placeholder,
     textarea::placeholder {        
-        color: #A03400;
-        font: normal normal normal 15.5px/20px Roboto;
+        color: #A03400 !important;
+        font: normal normal normal 13.5px/20px Roboto;
     }
 
     .form-card {
-        position: relative;
-        top: -203px;
-        left: 0;
-        width: 1180px;
-        height: 392px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
+        position: absolute;
+        top: 32%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 61.5%;
+        min-height: 36.5%;
+        background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 24%, #FFF 0, #FFF 75%);
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
+        padding: 15px 20px 35px 20px;
     }
 
-    .form-header {
-        display: flex;
-        position: absolute;
-        width: 100%;    
-        height: 93px;
+    .form-header { 
+        height: 25%;
         background: #FFCA00 0% 0% no-repeat padding-box;
         border-radius: 20px 20px 0px 0px;
     }
 
     .text-header {
-        position: absolute;
-        left: 60.5px;
-        top: 25px;
-        font: italic normal bold 22.5px/31px Roboto;
-        letter-spacing: 0.5px;
+        padding-left: 40px;
+        padding-top: 7px;
+        font: italic normal bold 20.5px/33px Roboto;
         z-index: 2;
     }
 
     .switch {
         position: absolute;
-        left: 983px;
-        top: 27%;
+        left: 80%;
+        top: 7%;
         font: normal normal normal 17px/21px Roboto;
         letter-spacing: 0px;
         color: #A03400;
@@ -594,13 +653,13 @@ export default {
     }
 
     #preco {
-      padding-left: 40px;
+      color: #A03400 !important;
     }
 
     .reais {
       position: absolute;
-      left: 1000px;
-      top: 10px;
+      left: 87.5%;
+      top: 2.7%;
     }
 
     .upd-btn {
@@ -709,31 +768,33 @@ export default {
 
 /*--------------- INPUT FILE --------------- */
     .dropbox {
+        position: relative;
         height: 100%;
         border: 1px solid #E43636;
         border-radius: 10px;
         opacity: 1;
-        font: normal normal normal 15.7px/21px Roboto;
+        font: normal normal normal 13.7px/21px Roboto;
         display: flex;
         align-items: center;
         color: #A03400;
+        padding-top: 10px;
     }
 
     .dropbox p {
         text-align: center;
-        line-height: 30px;
+        line-height: 25px;
     }
   
     .input-file {
         opacity: 0;
         position: absolute;
         cursor: pointer;
-        width: 1140px;
-        height: 110px;
+        width: 100%;
+        height: 100%;
     }
 
     .bi.bi-image {
-        font-size: 49px;
+        font-size: 46px;
         color: #E43636;
     }
 

@@ -16,10 +16,9 @@ export default {
 
 <style>
     .input {
-        width: 100%;
         border: 1px solid #E43636;
         border-radius: 10px;
         padding-left: 19.5px; 
-        font: normal normal normal 16px/21px Roboto;
+        font: normal normal normal 13.5px/21px Roboto;
     }
 </style>
