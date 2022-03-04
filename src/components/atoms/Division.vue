@@ -15,30 +15,29 @@ export default {
 <style>  
     .division {
         position: absolute;
-        top: 852px;
+        top: 150%;
+        width: 100%;
+        height: 10%;
     }
 
     .division__left-line,
     .division__right-line {
         position: absolute;
-        width: 705px;
         border: 1px solid #E43636;
         opacity: 0.5;
+        width: 50%;
     }
 
     .division__left-line {
-        left: 0;
     }
 
-    .division__right-line { 
-        left: 1215px;
+    .division__right-line {
     }
 
     .division__text-center {
         position: absolute;
-        top: -12px;
-        left: 755px;
-        width: 410px;
+        top: 0;
+        left: 0;
         text-align: center;
         font: italic normal bold 23.5px/29px Roboto;
         color: #A03400;

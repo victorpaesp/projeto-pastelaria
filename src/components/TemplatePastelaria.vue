@@ -21,13 +21,17 @@ export default {
 <style>
 
     .container-fluid {
-        max-width: 1666px;
+        max-width: 1666px;        
         
     }
     .app {
         position: relative;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100vh;
-        background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box;
+        
+        background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box ;
     }
+
 </style>

@@ -1,8 +1,11 @@
 <template>
-    <div>
+    <div class="mainteste">
 
+        <!-- Card -->
         <div class="form-card">
-            <div class="row d-flex flex-wrap-reverse testetaa">
+
+            <!-- Card Header -->
+            <div class="row d-flex flex-wrap-reverse">
                 <div class="col-sm-9 text-header mb-2">                        
                     Monte aqui o seu cardápio. O que está esperando?                
                 </div>
@@ -12,7 +15,7 @@
             </div>
 
 
-
+            <!-- Card Form -->
             <form class="testef" onsubmit="event.preventDefault();" ref="formpastel">                
 
                 <div class="row">
@@ -50,28 +53,10 @@
                         </div> 
                     </div>
                 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <!-- Carregamento da prévia de como ficará a imagem no card -->
                     <div v-if="imageData!=null">   
-                      <br> 
+                        <img class="preview" height="268" width="356" :src="imagem">
+                     <!-- <br> 
                         <a href="#abrirModal">{{ imageloading }}</a>       
                         <div class="modal" id="abrirModal"> 
                           <div>
@@ -90,53 +75,62 @@
                               <img class="preview" height="180" width="180" :src="imagem">
                               <br>
                           </div>
-                        </div>  
+                        </div>  -->
                     </div> 
                 </div>
-                <ClearButton />
+                <ClearButton @clearInputs="clearForm"/>
                 <SubmitButton @sendForm="createItem" />
 
                 <!-- Erros de campos obrigatórios -->
-                <div class="warning" v-if="errors.length">                    
-                    <div class="warning__errors"> <i class="bi bi-exclamation-triangle"></i> Os seguintes campos precisam ter valor:
-                        <p v-for="error in errors" :key="error">{{ error }}</p> 
+                <div class="warning" v-if="errors.length">   Os seguintes campos precisam ter valor:                 
+                    <div class="warning__errors"> 
+                        <div class="" v-for="error in errors" :key="error">{{ error }}</div> 
                     </div>
                 </div>
-            </form></div>
+                
+            </form>
+            <Division />
 
+<!--<div class="d-flex bd-highlight testy">
+                <div class="p-2 flex-fill bd-highlight"><hr width="50" size = 5 height="200" noshade></div>
+                <div class="p-2 flex-fill bd-highlight">Flex item</div>
+                <div class="p-2 flex-fill bd-highlight"><hr width="50" size = 5 noshade></div>
+            </div>-->
         <FilterButton @input="readItem" v-model="filtro"/>
+        </div>
 
         <!-- Card de item adicionado -->
-        <div class="card" v-for="comida of comidasData" :key="comida.id">
-            <div class="item">
-                <div class="item-header">
-                      <p class="titulo-pedido">"{{ comida.titulo }}"</p>
-                      <p class="preco-pedido">R$ {{ comida.preco }}</p>
-                </div>
-                <div>                  
-                    <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
-                </div>
-                <p class="sabor-pedido">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
-                <p class="descricao-pedido">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>         
-                <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+                <div class="card" v-for="comida of comidasData" :key="comida.id">
+                    <div class="item">
+                        <div class="item-header">
+                            <p class="titulo-pedido">"{{ comida.titulo }}"</p>
+                            <p class="preco-pedido">{{ comida.preco }}</p>
+                        </div>
+                        <div >                  
+                            <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                        </div>
+                        <p class="sabor-pedido">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                        <p class="descricao-pedido">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>         
+                        <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
 
-                <!-- Área de edição dos itens -->
-                <div class="edit-card" v-if="editar">
-                    <input type="text" class="titulo-update" v-model="comida.titulo">
-                    <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
-                    <input type="text" class="sabor-update" v-model="comida.sabor">            
-                    <input type="text" class="descricao-update" v-model="comida.descricao">
-                    <!--<div class="dropbox-update">
-                        <input type="file" accept="image/*" class="input-update" @change="onUpload" />
-                    </div>-->
-                    <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
-                    <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                        <!-- Área de edição dos itens -->
+                        <div class="edit-card" v-if="editar">
+                            <input type="text" class="titulo-update" v-model="comida.titulo">
+                            <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                            <input type="text" class="sabor-update" v-model="comida.sabor">            
+                            <input type="text" class="descricao-update" v-model="comida.descricao">
+                            <!--<div class="dropbox-update">
+                                <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                            </div>-->
+                            <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                            <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                        </div>
+                        
+                        <button class="del" @click="deleteItem(comida.id)">x</button>
+                    </div>
                 </div>
-                
-                <button class="del" @click="deleteItem(comida.id)">x</button>
-            </div>
-        </div>
     </div>
+    
 </template>
 
 <script>
@@ -146,6 +140,7 @@ import Input from '@/components/atoms/Input.vue';
 import Textarea from '@/components/atoms/Textarea.vue';
 import FilterButton from '@/components/atoms/FilterButton.vue';
 import ToggleButton from '@/components/atoms/ToggleButton.vue';
+import Division from '@/components/atoms/Division.vue';
 import firebase from "../../firebaseInit";
 import {VMoney} from 'v-money'
 
@@ -196,9 +191,28 @@ export default {
         ClearButton,
         SubmitButton,
         ToggleButton,
-        FilterButton
+        FilterButton,
+        Division
     },
     methods: {
+
+
+//--------------- Método de limpeza do formulário        
+        clearForm() {
+            this.titulo = "",
+            this.sabor = "",
+            this.preco = "R$ 0,00",
+            this.descricao = "",
+            this.imageData = null,
+            this.imgData = "",
+
+            this.imagem = "", 
+            console.log(this.imagem);
+            
+            console.log(this.imgData);
+            
+            console.log(this.imageData);
+        },
 
 //--------------- Métodos toggle button
         triggerToggleEvent(value) {
@@ -233,12 +247,25 @@ export default {
 
 //--------------- Métodos CRUD
         createItem() {
-            if (this.titulo && this.sabor && this.preco != '0,00') {
+            if (this.titulo && this.sabor && this.preco != 'R$ 0,00') {
                 db.collection("cardapio")
                 .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem})
                 .then(() => {
+                    this.$swal({
+                        icon: 'success',
+                        title: 'Item criado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                     console.log("Item criado");
                     this.readItem();
+                    this.titulo = "",
+                    this.sabor = "",
+                    this.imgItem = null,
+                    this.imageData = null,
+                    this.imagem = '',
+                    this.$refs.formpastel.reset();
+                    
                 })
             }
             this.errors = [];
@@ -251,14 +278,10 @@ export default {
               this.errors.push('Sabor')
             }
 
-            if (this.preco == '0,00') {
+            if (this.preco == 'R$ 0,00') {
               this.errors.push('Preço')
             }
         
-            this.titulo = "";
-            this.sabor = "";
-            this.imageData = null;
-            this.$refs.formpastel.reset();
         },
         editItem(id) {
             db.collection("cardapio")
@@ -316,7 +339,12 @@ export default {
                   .doc(id)
                   .delete()
                   .then(() => {
-                      console.log("Item deletado");
+                      this.$swal({
+                        icon: 'success',
+                        title: 'Item deletado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                       this.readItem();
                   })
                 } 
@@ -408,16 +436,26 @@ export default {
 <style>
 
 /*--------------- FORM --------------- */
-    .form-pastel {
-        position: absolute;
-        width: 96%;
-        top: 19%;
-        left: 2%;
-        z-index: 2;
+    .testetaa {
+        
+        line-height: 0cm;
     }
 
-    .testetaa {
-        min-width: 307px
+    .mainteste {
+        position: absolute;
+        left: 0;
+        top: 32%;
+        width: 100%;
+        height: 100%;
+    }
+
+    .testy {
+        position: absolute;
+        top: 150%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        text-align: center;
     }
 
     .testa {
@@ -432,24 +470,6 @@ export default {
         height: 100%;
     }
 
-    .start-row {
-        display: grid;
-        grid-template-columns: 460px 480px 160px;
-        grid-column-gap: 20px;
-        height: 40px;
-    }
-
-    .middle-row {
-        width: 100%;
-        padding-top: 20px;
-    }
-
-    .end-row {
-        width: 100%;
-        height: 125px;
-        padding-top: 15px;
-    }
-
     input::placeholder,
     textarea::placeholder {        
         color: #A03400 !important;
@@ -458,7 +478,7 @@ export default {
 
     .form-card {
         position: absolute;
-        top: 32%;
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
         width: 61.5%;
@@ -467,12 +487,6 @@ export default {
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
         padding: 15px 20px 35px 20px;
-    }
-
-    .form-header { 
-        height: 25%;
-        background: #FFCA00 0% 0% no-repeat padding-box;
-        border-radius: 20px 20px 0px 0px;
     }
 
     .text-header {
@@ -494,77 +508,65 @@ export default {
 
     .warning {
       position: absolute;
-      top: 365px;
-      left: 300px;
+      top: 110%;
+      left: 50%;
+      transform: translateX(-50%);
       border: 1px solid red;
       padding: 10px;
       border-radius: 10px;
+      text-align: center;
+      color: #E43636;
+      background-color: white;
+      font-weight: bold;
     }
 
     .warning__errors {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 530px;
-      color: red;
+      width: 100%;
       font-weight: bold;
-    }
-
-    .warning__errors i {
-      position: absolute;
-      top: -1px;
-      left: -40px;
-      font-size: 30px;
-      color: red;
+      min-width: 100px;
     }
 
 /*--------------- CARDS --------------- */
     .card {
         position: relative;
-        top: 0;
+        top: 800px;
         left: 0;
-        height: 295px;            
+        width: 61.5%;
+        height: 31.5%;  
+        border: 0;        
     }
 
     .item {
         position: absolute;
         top: 0;
-        left: 475px;
-        width: 1070px;
-        height: 221px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
+        left: 11%;
+        width: 89%;
+        height: 75.5%;        
+        background: linear-gradient(to bottom, #E43636 0, #E43636 36%, #FFF 0, #FFF 75%);
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
         opacity: 1;
     }
 
-    .item-header {
-        display: flex;
-        width: 100%;
-        height: 80px;
-        background: #E43636 0% 0% no-repeat padding-box;
-        border-radius: 20px 20px 0px 0px;
-        opacity: 1;
-    }
-
     .titulo-pedido {
         position: absolute;
-        top: 20px;
-        font: italic normal bold 30px/37px Roboto;
+        top: 9%;
+        font: italic normal bold 3vw/37px Roboto;
         letter-spacing: 0px;
         color: #FFCA00;
-        opacity: 1;
-        padding-left: 110px;
+        padding-left: 12.2%;
     }
 
     .preco-pedido {
         position: absolute;
-        top: 20px;
-        left: 910px;
+        top: 9%;
+        left: 86%;
         font: italic normal bold 24px/37px Roboto;
         letter-spacing: 0px;
         color: #FFFFFF;
-        opacity: 1;
     }
 
     .sabor-pedido {
@@ -599,10 +601,11 @@ export default {
     .imagem-item {
         position: absolute;
         top: 50%;
-        left: -110px;
+        left: -12.3%;
         transform: translate(0%, -50%);
-        width: 180px;
-        height: 180px;
+        width: 20.1%;
+        max-width: 180px;
+        max-height: 180px;
         background-color: #FFF;
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 10px;

@@ -3,7 +3,7 @@
             <label for="all">
                 <input type="radio" name="radio" value="all" id="all" checked="checked"
                 @change="$emit('input', 'all')" />
-                <span>Mostrar tudo</span>
+                <span>Tudo</span>
             </label>
             <label for="food">
                 <input type="radio" name="radio" value="food" id="food" 
@@ -56,11 +56,11 @@ export default {
 <style scoped>
     .filter-btn {
         position: absolute;
-        top: 860px;
-        left: 1190px;
+        top: 180%;
+        left: 70%;
         z-index: 1;
-        width: 350px;
-        margin: 20px auto;
+        width: 30%;
+        height: 10%;
         border-radius: 8px;
         display: flex;
         justify-content: space-between;

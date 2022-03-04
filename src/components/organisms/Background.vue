@@ -1,9 +1,9 @@
 <template>
-    <div>
+    
       <!--  <Gradient /> -->
         <Images />
       <!--  <Division /> -->
-    </div>
+    
 </template>
 
 <script>

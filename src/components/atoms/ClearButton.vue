@@ -1,5 +1,5 @@
 <template>
-    <button type="reset" class="clear-btn">LIMPAR</button>
+    <button type="reset" class="clear-btn" @click="$emit('clearInputs')">LIMPAR</button>
 </template>
 
 <script>

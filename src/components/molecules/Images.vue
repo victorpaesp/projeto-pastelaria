@@ -21,7 +21,6 @@ export default {
 </script>
 
 <style scoped>
-
     .wave {
       position: absolute;
       top: 0;
