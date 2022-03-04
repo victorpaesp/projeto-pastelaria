@@ -1,7 +1,15 @@
 <template>
-    <div class="container-fluid app">
-        <Background />
-        <Formulario />  
+    <div class="container-fluid">
+        <div class="app">
+            <Background />
+            
+        </div>
+        <div class="app2">
+            <Formulario />
+        <h1>Teste</h1>  
+        <br>
+        <br>  
+        </div>  
     </div>
 </template>
 
@@ -20,18 +28,22 @@ export default {
 
 <style>
 
-    .container-fluid {
-        max-width: 1666px;        
+    .container-fluid {     
+        position: relative;   
+        max-width: 1666px;
+        padding: 0;    
+        background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box ;
         
     }
     .app {
-        position: relative;
-        top: 0;
-        left: 0;
         width: 100%;
-        height: 100vh;
+        height: 100%;
+        min-height: 100vh;
         
-        background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box ;
+    }
+    .app2 {
+        width: 100%;
+        height: 100%;
     }
 
 </style>

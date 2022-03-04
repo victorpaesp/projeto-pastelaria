@@ -46,17 +46,21 @@
 
                 <div class="row mt-3">
                     <div class="col">
-                        <div class="form-group dropbox"> 
-                                <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />
-                                <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
-                           
+                        <div class="form-group dropbox" v-if="imageData==null"> 
+                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />
+                            <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
                         </div> 
+                        <div class="form-group dropbox" v-else>                                       
+                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />                 
+                            <p><img class="" width="180" height="180" :src="imagem">                
+                            Clique para localizar outra imagem.</p>
+                        </div>
                     </div>
                 
                     <!-- Carregamento da prévia de como ficará a imagem no card -->
-                    <div v-if="imageData!=null">   
+                 <!--    <div v-if="imageData!=null">   
                         <img class="preview" height="268" width="356" :src="imagem">
-                     <!-- <br> 
+                     <br> 
                         <a href="#abrirModal">{{ imageloading }}</a>       
                         <div class="modal" id="abrirModal"> 
                           <div>
@@ -75,8 +79,8 @@
                               <img class="preview" height="180" width="180" :src="imagem">
                               <br>
                           </div>
-                        </div>  -->
-                    </div> 
+                        </div>  
+                    </div> -->
                 </div>
                 <ClearButton @clearInputs="clearForm"/>
                 <SubmitButton @sendForm="createItem" />
@@ -781,11 +785,18 @@ export default {
         align-items: center;
         color: #A03400;
         padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     .dropbox p {
         text-align: center;
         line-height: 25px;
+    }
+
+    .dropbox img {
+        border: 0;
+        border-radius: 10px;
+        background-color: #FFF;
     }
   
     .input-file {
