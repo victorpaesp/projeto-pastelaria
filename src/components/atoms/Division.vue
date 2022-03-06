@@ -17,21 +17,22 @@ export default {
         position: absolute;
         top: 150%;
         width: 100%;
-        height: 10%;
     }
 
     .division__left-line,
     .division__right-line {
-        position: absolute;
+        position: relative;
         border: 1px solid #E43636;
         opacity: 0.5;
         width: 50%;
     }
 
     .division__left-line {
+        left: 0;
     }
 
     .division__right-line {
+        right: -50%;
     }
 
     .division__text-center {

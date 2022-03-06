@@ -56,31 +56,6 @@
                             Clique para localizar outra imagem.</p>
                         </div>
                     </div>
-                
-                    <!-- Carregamento da prévia de como ficará a imagem no card -->
-                 <!--    <div v-if="imageData!=null">   
-                        <img class="preview" height="268" width="356" :src="imagem">
-                     <br> 
-                        <a href="#abrirModal">{{ imageloading }}</a>       
-                        <div class="modal" id="abrirModal"> 
-                          <div>
-                              <a href="#fechar" title="Fechar" class="fechar">x</a>         
-                              <div class="item-modal">
-                                  <div class="item-header">
-                                      <p class="titulo-pedido">"{{ titulo }}"</p>
-                                      <p class="preco-pedido">R$ {{ preco }}</p>
-                                  </div>
-                                  <div class="imagem-item"><img> </div>
-                                  <p class="sabor-pedido">Sabor: {{ sabor }}<span class="pedido-res"></span></p>
-                                  <p class="descricao-pedido">Descrição: {{ descricao }}<span class="pedido-res"></span></p>         
-                                  <button class="upd"><i class="bi bi-pencil-square upd-btn"></i></button>
-                                  <button class="del">x</button>
-                              </div>
-                              <img class="preview" height="180" width="180" :src="imagem">
-                              <br>
-                          </div>
-                        </div>  
-                    </div> -->
                 </div>
                 <ClearButton @clearInputs="clearForm"/>
                 <SubmitButton @sendForm="createItem" />
@@ -94,17 +69,17 @@
                 
             </form>
             <Division />
-
-<!--<div class="d-flex bd-highlight testy">
-                <div class="p-2 flex-fill bd-highlight"><hr width="50" size = 5 height="200" noshade></div>
-                <div class="p-2 flex-fill bd-highlight">Flex item</div>
-                <div class="p-2 flex-fill bd-highlight"><hr width="50" size = 5 noshade></div>
-            </div>-->
         <FilterButton @input="readItem" v-model="filtro"/>
         </div>
 
         <!-- Card de item adicionado -->
-                <div class="card" v-for="comida of comidasData" :key="comida.id">
+                <div class="no-item" v-if="!comidasData.length">
+                    <i class="bi bi-search"></i>
+                    <h3>Nenhum item cadastrado</h3>
+                    
+                </div>
+
+                <div class="card" v-for="comida in comidasData" :key="comida.id">
                     <div class="item">
                         <div class="item-header">
                             <p class="titulo-pedido">"{{ comida.titulo }}"</p>
@@ -118,7 +93,7 @@
                         <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
 
                         <!-- Área de edição dos itens -->
-                        <div class="edit-card" v-if="editar">
+                        <div class="edit-card" v-if="comida.editar == true">
                             <input type="text" class="titulo-update" v-model="comida.titulo">
                             <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
                             <input type="text" class="sabor-update" v-model="comida.sabor">            
@@ -253,13 +228,13 @@ export default {
         createItem() {
             if (this.titulo && this.sabor && this.preco != 'R$ 0,00') {
                 db.collection("cardapio")
-                .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem})
+                .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem, editar: this.editar})
                 .then(() => {
                     this.$swal({
                         icon: 'success',
                         title: 'Item criado!',
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 1500,
                     });
                     console.log("Item criado");
                     this.readItem();
@@ -291,21 +266,20 @@ export default {
             db.collection("cardapio")
               .doc(id)
               .update({
-                editar: this.editar
-              })
-              this.editar = !this.editar;
+                editar: true
+              })        
+              this.readItem()
         }, 
         cancelEdit(id) {
             db.collection("cardapio")
               .doc(id)
               .update({
-                editar: !this.editar
+                editar: false
               })
-              this.editar = !this.editar              
-              this.readItem();
+              this.readItem()
         },
         saveEdit(item) {
-          const id = item.id
+            const id = item.id
             db.collection("cardapio")
               .doc(id)
               .update({
@@ -313,11 +287,12 @@ export default {
                 sabor: item.sabor,
                 preco: item.preco,
                 descricao: item.descricao,
+                editar: false
                 //imgItem: this.imagem
               })
-              .then(() => {
-                this.readItem();                
-                this.editar = !this.editar  
+              .then(() => {        
+                this.editar = false 
+                this.readItem();        
               })
               
             this.titulo = "";
@@ -364,8 +339,8 @@ export default {
                 case "all": 
                     this.comidasData = [];
                     db.collection("cardapio")
-                    .get()
-                    .then((querySnapshot) => {
+                    .onSnapshot((querySnapshot) => {
+                        this.comidasData = [];
                         querySnapshot.forEach((doc) => {
                             this.comidasData.push({
                                 id: doc.id,
@@ -375,6 +350,7 @@ export default {
                                 descricao: doc.data().descricao,                        
                                 imgItem: doc.data().imgItem,
                                 itemTipo: doc.data().itemTipo,
+                                editar: doc.data().editar
                             });
                         console.log(doc.id, " => ", doc.data());
                         });
@@ -384,8 +360,8 @@ export default {
                 case "food":
                     this.comidasData = [];
                     db.collection("cardapio").where("itemTipo", "==", "Comida")
-                    .get()
-                    .then((querySnapshot) => {
+                    .onSnapshot((querySnapshot) => {
+                        this.comidasData = [];
                         querySnapshot.forEach((doc) => {
                             this.comidasData.push({
                                 id: doc.id,
@@ -395,6 +371,7 @@ export default {
                                 descricao: doc.data().descricao,                        
                                 imgItem: doc.data().imgItem,
                                 itemTipo: doc.data().itemTipo,
+                                editar: doc.data().editar
                             });
                             console.log(doc.id, " => ", doc.data());
                         });
@@ -406,6 +383,7 @@ export default {
                     db.collection("cardapio").where("itemTipo", "==", "Bebida")
                     .get()
                     .then((querySnapshot) => {
+                        this.comidasData = [];
                         querySnapshot.forEach((doc) => {
                             this.comidasData.push({
                                 id: doc.id,
@@ -415,6 +393,7 @@ export default {
                                 descricao: doc.data().descricao,                        
                                 imgItem: doc.data().imgItem,
                                 itemTipo: doc.data().itemTipo,
+                                editar: doc.data().editar
                             });
                             console.log(doc.id, " => ", doc.data());
                         });
@@ -424,10 +403,10 @@ export default {
                 default:
                   console.log('Default');
             } 
-        },
+        }
     },
     created() {
-      this.readItem()
+      this.readItem();
     },  
     mounted() {
         setTimeout(() => {
@@ -486,18 +465,21 @@ export default {
         left: 50%;
         transform: translateX(-50%);
         width: 61.5%;
-        min-height: 36.5%;
+        min-height: 35.3%;
         background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 24%, #FFF 0, #FFF 75%);
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
-        padding: 15px 20px 35px 20px;
+        padding: 1.5% 20px 20px 20px;
+    }
+
+    .testef {
+        padding-top: 0.6%;
     }
 
     .text-header {
         padding-left: 40px;
-        padding-top: 7px;
         font: italic normal bold 20.5px/33px Roboto;
-        z-index: 2;
+        z-index: 2;        
     }
 
     .switch {
@@ -541,6 +523,18 @@ export default {
         width: 61.5%;
         height: 31.5%;  
         border: 0;        
+    }
+
+    .no-item {
+        position: absolute;
+        top: 800px;
+        width: 100%;
+        text-align: center;
+        color: #cdcdcd;
+    }
+
+    .no-item i {
+        font-size: 50px;
     }
 
     .item {
