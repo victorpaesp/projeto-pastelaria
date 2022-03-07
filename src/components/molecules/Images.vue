@@ -43,7 +43,7 @@ export default {
     
     .pasteis-header {
         position: absolute;
-        top: 12.5%;
+        top: 180px;
         left: 62%;
         width: 20%;
     }

@@ -14,9 +14,8 @@
                 </div>
             </div>
 
-
             <!-- Card Form -->
-            <form class="testef" onsubmit="event.preventDefault();" ref="formpastel">                
+            <form class="form" onsubmit="event.preventDefault();" ref="formpastel">                
 
                 <div class="row">
                     <div class="col-xl-5 mt-2">
@@ -46,22 +45,32 @@
 
                 <div class="row mt-4">
                     <div class="col">
-                        <div class="form-group dropbox" v-if="imageData==null"> 
-                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />
-                            <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
+                        <div :class="['form-group dropbox', dragging ? 'dropbox-over' : 'form-group dropbox']" 
+                            v-if="imageData==null"
+                            drag-over="handleDragOver"
+                            @dragenter="dragging = true"  
+                            @dragleave="dragging = false"
+                        > 
+                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload"/>
+                            <p>
+                                <i class="bi bi-image"></i> 
+                                <br> 
+                                Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.
+                            </p>
                         </div> 
                         <div class="form-group dropbox" v-else>                                       
-                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />                 
-                            <p> <img class="" width="180" height="180" :src="imagem">    <br> <br>             
-                            Clique para localizar outra imagem.</p>
+                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload"/>                 
+                            <p> 
+                                <img class="" width="180" height="180" :src="imagem">    
+                                <br>
+                                <br>             
+                                Clique para localizar outra imagem.
+                            </p>
                         </div>
                     </div>
                 </div>
                 <ClearButton @clearInputs="clearForm"/>
-                <SubmitButton @sendForm="createItem" />
-
-                
-                
+                <SubmitButton @sendForm="createItem" />             
             </form>
         </div>
 
@@ -81,44 +90,122 @@
 
 
         <!-- Card de item adicionado -->
-                <div class="no-item" v-if="!comidasData.length">
-                    <i class="bi bi-search"></i>
-                    <h3>Nenhum item cadastrado</h3>
-                </div>
+        <div class="no-item" v-if="!comidasData.length">
+            <i class="bi bi-search"></i>
+            <h3>Nenhum item cadastrado</h3>
+        </div>
 
-                <div class="card" v-for="comida in comidasData" :key="comida.id">
-                    <div class="item">
-                        <div class="item-header row d-flex">
-                            <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
-                            <p class="preco-pedido col-sm-3 ">{{ comida.preco }}</p>
-                        </div>
-                        <div>                  
-                            <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
-                        </div>
-                        <div class="sabor-pedido row d-flex">
-                            <p>Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
-                        </div>
-                        <div class="descricao-pedido row d-flex">
-                            <p>Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
-                        </div>       
-                        <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
 
-                        <!-- Área de edição dos itens -->
-                        <div class="edit-card" v-if="comida.editar == true">
-                            <input type="text" class="titulo-update" v-model="comida.titulo">
-                            <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
-                            <input type="text" class="sabor-update" v-model="comida.sabor">            
-                            <input type="text" class="descricao-update" v-model="comida.descricao">
-                            <!-- <div class="dropbox-update">
-                                <input type="file" accept="image/*" class="input-update" @change="onUpload" />
-                            </div> -->
-                            <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
-                            <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
-                        </div>
-                        
-                        <button class="del" @click="deleteItem(comida.id)">x</button>
+        <!-- Todos os itens -->
+        <div v-if="this.filtro == 'all'">
+            <div class="card" v-for="comida in comidasData" :key="comida.id">
+                <div class="item">
+                    <div class="item-header row d-flex">
+                        <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                        <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
                     </div>
+                    <div>                  
+                        <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                    </div>
+                    <div class="sabor-pedido row d-flex">
+                        <p class="pedido-title">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                    </div>
+                    <div class="descricao-pedido row d-flex">
+                        <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                    </div>       
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+
+                    <!-- Área de edição dos itens -->
+                    <div class="edit-card" v-if="comida.editar == true">
+                        <input type="text" class="titulo-update" v-model="comida.titulo">
+                        <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                        <input type="text" class="sabor-update" v-model="comida.sabor">            
+                        <input type="text" class="descricao-update" v-model="comida.descricao">
+                        <!-- <div class="dropbox-update">
+                            <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                        </div> -->
+                        <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                        <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                    </div>
+                    
+                    <button class="del" @click="deleteItem(comida.id)">x</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Filtrado (apenas comidas) -->
+        <div v-if="this.filtro == 'food'">
+            <div class="card" v-for="comida in filterFood" :key="comida.id">
+                <div class="item">
+                    <div class="item-header row d-flex">
+                        <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                        <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
+                    </div>
+                    <div>                  
+                        <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                    </div>
+                    <div class="sabor-pedido row d-flex">
+                        <p class="pedido-title">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                    </div>
+                    <div class="descricao-pedido row d-flex">
+                        <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                    </div>       
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+
+                    <!-- Área de edição dos itens -->
+                    <div class="edit-card" v-if="comida.editar == true">
+                        <input type="text" class="titulo-update" v-model="comida.titulo">
+                        <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                        <input type="text" class="sabor-update" v-model="comida.sabor">            
+                        <input type="text" class="descricao-update" v-model="comida.descricao">
+                        <!-- <div class="dropbox-update">
+                            <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                        </div> -->
+                        <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                        <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                    </div>
+                    
+                    <button class="del" @click="deleteItem(comida.id)">x</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtrado (apenas bebidas) -->
+        <div v-if="this.filtro == 'drink'">
+            <div class="card" v-for="comida in filterDrink" :key="comida.id">
+                <div class="item">
+                    <div class="item-header row d-flex">
+                        <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                        <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
+                    </div>
+                    <div>                  
+                        <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                    </div>
+                    <div class="sabor-pedido row d-flex">
+                        <p class="pedido-title">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                    </div>
+                    <div class="descricao-pedido row d-flex">
+                        <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                    </div>       
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+
+                    <!-- Área de edição dos itens -->
+                    <div class="edit-card" v-if="comida.editar == true">
+                        <input type="text" class="titulo-update" v-model="comida.titulo">
+                        <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                        <input type="text" class="sabor-update" v-model="comida.sabor">            
+                        <input type="text" class="descricao-update" v-model="comida.descricao">
+                        <!-- <div class="dropbox-update">
+                            <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                        </div> -->
+                        <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                        <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                    </div>
+                    
+                    <button class="del" @click="deleteItem(comida.id)">x</button>
+                </div>
+            </div>
+        </div>
     </div>
     
 </template>
@@ -168,8 +255,12 @@ export default {
             // Dados img
             imageData: null,
             imgItem: '',
-            imagem: ''
+            imagem: '',
+            dragging: false
         }
+    },
+    firestore: {
+        comidas: db.collection("cardapio"),
     },
     directives: {
       money: VMoney
@@ -185,7 +276,6 @@ export default {
     },
     methods: {
 
-
 //--------------- Método de limpeza do formulário        
         clearForm() {
             this.titulo = "",
@@ -194,13 +284,8 @@ export default {
             this.descricao = "",
             this.imageData = null,
             this.imgData = "",
-
-            this.imagem = "", 
-            console.log(this.imagem);
-            
-            console.log(this.imgData);
-            
-            console.log(this.imageData);
+            this.dragging = false,
+            this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
         },
 
 //--------------- Métodos toggle button
@@ -252,7 +337,8 @@ export default {
                     this.sabor = "",
                     this.imgItem = null,
                     this.imageData = null,
-                    this.imagem = '',
+                    this.dragging = false,
+                    this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd',
                     this.$refs.formpastel.reset();
                     
                 })
@@ -278,7 +364,6 @@ export default {
               .update({
                 editar: true
               })        
-              this.readItem()
         }, 
         cancelEdit(id) {
             db.collection("cardapio")
@@ -286,7 +371,6 @@ export default {
               .update({
                 editar: false
               })
-              this.readItem()
         },
         saveEdit(item) {
             const id = item.id
@@ -340,84 +424,126 @@ export default {
             })
         },
         readItem() {
-            if (this.imagem == "" || this.imgItem == "") {
-              this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
+            if (this.imgItem == "" || this.imgItem == null) {
+                this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
             }
-
-            switch (this.filtro) {
-
-                case "all": 
+            this.comidasData = [];
+                db.collection("cardapio")
+                .onSnapshot((querySnapshot) => {
                     this.comidasData = [];
-                    db.collection("cardapio")
-                    .onSnapshot((querySnapshot) => {
-                        this.comidasData = [];
-                        querySnapshot.forEach((doc) => {
-                            this.comidasData.push({
-                                id: doc.id,
-                                titulo: doc.data().titulo,
-                                sabor: doc.data().sabor,
-                                preco: doc.data().preco,
-                                descricao: doc.data().descricao,                        
-                                imgItem: doc.data().imgItem,
-                                itemTipo: doc.data().itemTipo,
-                                editar: doc.data().editar
-                            });
-                        console.log(doc.id, " => ", doc.data());
+                    querySnapshot.forEach((doc) => {
+                        this.comidasData.push({
+                            id: doc.id,
+                            titulo: doc.data().titulo,
+                            sabor: doc.data().sabor,
+                            preco: doc.data().preco,
+                            descricao: doc.data().descricao,                        
+                            imgItem: doc.data().imgItem,
+                            itemTipo: doc.data().itemTipo,
+                            editar: doc.data().editar
                         });
-                    })
-                    break;
+                    console.log(doc.id, " => ", doc.data());
+                    });
+                })
+            // switch (this.filtro) {
 
-                case "food":
-                    this.comidasData = [];
-                    db.collection("cardapio").where("itemTipo", "==", "Comida")
-                    .onSnapshot((querySnapshot) => {
-                        this.comidasData = [];
-                        querySnapshot.forEach((doc) => {
-                            this.comidasData.push({
-                                id: doc.id,
-                                titulo: doc.data().titulo,
-                                sabor: doc.data().sabor,
-                                preco: doc.data().preco,
-                                descricao: doc.data().descricao,                        
-                                imgItem: doc.data().imgItem,
-                                itemTipo: doc.data().itemTipo,
-                                editar: doc.data().editar
-                            });
-                            console.log(doc.id, " => ", doc.data());
-                        });
-                    })
-                    break;
+            //     case "all": 
+            //         this.comidasData = [];
+            //         db.collection("cardapio")
+            //         .onSnapshot((querySnapshot) => {
+            //             this.comidasData = [];
+            //             querySnapshot.forEach((doc) => {
+            //                 this.comidasData.push({
+            //                     id: doc.id,
+            //                     titulo: doc.data().titulo,
+            //                     sabor: doc.data().sabor,
+            //                     preco: doc.data().preco,
+            //                     descricao: doc.data().descricao,                        
+            //                     imgItem: doc.data().imgItem,
+            //                     itemTipo: doc.data().itemTipo,
+            //                     editar: doc.data().editar
+            //                 });
+            //             console.log(doc.id, " => ", doc.data());
+            //             });
+            //         })
+            //         break;
 
-                case "drink":
-                    this.comidasData = [];
-                    db.collection("cardapio").where("itemTipo", "==", "Bebida")
-                    .get()
-                    .then((querySnapshot) => {
-                        this.comidasData = [];
-                        querySnapshot.forEach((doc) => {
-                            this.comidasData.push({
-                                id: doc.id,
-                                titulo: doc.data().titulo,
-                                sabor: doc.data().sabor,
-                                preco: doc.data().preco,
-                                descricao: doc.data().descricao,                        
-                                imgItem: doc.data().imgItem,
-                                itemTipo: doc.data().itemTipo,
-                                editar: doc.data().editar
-                            });
-                            console.log(doc.id, " => ", doc.data());
-                        });
-                    })
-                    break;
+            //     case "food":
+            //         this.comidasData = [];
+            //         db.collection("cardapio").where("itemTipo", "==", "Comida")
+            //         .onSnapshot((querySnapshot) => {
+            //             this.comidasData = [];
+            //             querySnapshot.forEach((doc) => {
+            //                 this.comidasData.push({
+            //                     id: doc.id,
+            //                     titulo: doc.data().titulo,
+            //                     sabor: doc.data().sabor,
+            //                     preco: doc.data().preco,
+            //                     descricao: doc.data().descricao,                        
+            //                     imgItem: doc.data().imgItem,
+            //                     itemTipo: doc.data().itemTipo,
+            //                     editar: doc.data().editar
+            //                 });
+            //                 console.log(doc.id, " => ", doc.data());
+            //             });
+            //         })
+            //         break;
 
-                default:
-                  console.log('Default');
-            } 
+            //     case "drink":
+            //         this.comidasData = [];
+            //         db.collection("cardapio").where("itemTipo", "==", "Bebida")
+            //         .onSnapshot((querySnapshot) => {
+            //             this.comidasData = [];
+            //             querySnapshot.forEach((doc) => {
+            //                 this.comidasData.push({
+            //                     id: doc.id,
+            //                     titulo: doc.data().titulo,
+            //                     sabor: doc.data().sabor,
+            //                     preco: doc.data().preco,
+            //                     descricao: doc.data().descricao,                        
+            //                     imgItem: doc.data().imgItem,
+            //                     itemTipo: doc.data().itemTipo,
+            //                     editar: doc.data().editar
+            //                 });
+            //                 console.log(doc.id, " => ", doc.data());
+            //             });
+            //         })
+            //         break;
+
+            //     default:
+            //       console.log('Default');
+            // } 
+        }
+    },
+    // computed: {
+    //     filtered() {
+    //         return Object.keys(this.comidas)
+    //         .filter(id => this.comidas[id].itemTipo === "Comida")
+    //     }
+    // },
+
+
+
+    computed: {
+        filterAll: function () {
+            return this.comidasData.filter(function (fod) {
+                return fod.itemTipo == "Bebida";
+            })
+        },
+        filterFood: function () {
+            return this.comidasData.filter(function (um) {
+                return um.itemTipo == "Comida";
+            })
+        },
+        filterDrink: function () {
+            return this.comidasData.filter(function (dois) {
+                return dois.itemTipo == "Bebida";
+            })
         }
     },
     created() {
-      this.readItem();
-    }
+        this.readItem();
+    },
 }
 </script>
 
@@ -441,17 +567,24 @@ export default {
         border-radius: 20px;
         padding: 1.5% 20px 20px 20px;
         z-index: 1;
-        margin-bottom: 3.5%;
+        margin-bottom: 4%;
+        z-index: 0;
+    }
+
+    .form-card input,
+    .form-card textarea {
+        font-weight: 500;
+        color: #A03400 !important;
     }
 
     input::placeholder,
     textarea::placeholder {        
         color: #A03400 !important;
-        font: normal normal normal 1.4rem/20px Roboto;
+        font: normal normal 500 1.4rem/20px Roboto;
     }    
 
     /* Classe do formulário */
-    .testef { 
+    .form { 
         padding-top: 0.6%;
         padding-bottom: 2%;
     }
@@ -459,6 +592,10 @@ export default {
     .text-header {
         padding-left: 4%;
         font: italic normal bold 2rem/2.3rem Roboto;  
+    }
+
+    #preco {
+        font: normal normal 500 1.4rem/20px Roboto;
     }
 
     .warning {
@@ -517,6 +654,14 @@ export default {
         margin-bottom: 5%;
     }
 
+    .item-header {
+        padding-right: 8%;
+    }
+
+    .pedido-title {
+        font-weight: bold;
+    }
+
     .titulo-pedido {
         /* position: absolute; */
         top: 9%;
@@ -551,8 +696,9 @@ export default {
     }
 
     .pedido-res {
-        font-weight: normal;
+        padding-left: 0.5%;
         font-style: normal;
+        font-weight: 300;
     }
 
     .descricao-pedido {
@@ -634,18 +780,48 @@ export default {
     }
 
 /*--------------- UPDATE CARDS --------------- */
+
+    .edit-card input {
+        border: 1px solid #E43636;
+        border-radius: 6px;
+        padding-left: 5px;
+        font: normal normal 500 1.4rem/18px Roboto;
+        color: #000;
+        height: 20px;
+    }
+
+    @media (max-width: 1440px){
+        .edit-card input {
+            height: 18.2px;
+        }
+    }
+
+    @media (max-width: 1024px){
+        .edit-card input {
+            height: 15px;
+        }
+    }
+
+    @media (max-width: 768px){
+        .edit-card input {
+            padding-top: 1px;
+            height: 11px;
+        }
+    }
+    
     .titulo-update {
         position: absolute;
         top: 27%;
         left: 9%;
-        width: 30%;
+        width: 30%;        
     }
 
     .preco-update {
         position: absolute;
         top: 27%;
         right: 0;
-        width: 20;
+        width: 20%;
+        height: auto;
     }
 
     .sabor-update {
@@ -725,13 +901,6 @@ export default {
        background-color: #9d9d9d;
     }
 
-    .edit-card input {
-        border: 1px solid #E43636;
-        border-radius: 6px;
-        padding-left: 5px;
-        font: normal normal normal 16px/18px Roboto;
-    }
-
 /*--------------- INPUT FILE --------------- */
     .dropbox {
         position: relative;
@@ -750,6 +919,8 @@ export default {
         line-height: 25px;
         display: block;
         margin-top: 2%;
+        margin-bottom: 2%;
+        font: normal normal 500 1.4rem/20px Roboto;
     }
 
     .dropbox img {
@@ -770,4 +941,14 @@ export default {
         font-size: 5rem;
         color: #E43636;
     }
+
+    .dropbox-over {
+        border: dotted;
+    }
+
+
+/*--------------- SWEET ALERT --------------- */
+    .swal2-popup {
+        font-size: 1.8rem !important;
+    }    
 </style>
