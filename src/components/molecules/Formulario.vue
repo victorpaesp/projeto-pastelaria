@@ -9,7 +9,7 @@
                 <div class="col-sm-9 text-header mb-2">                        
                     Monte aqui o seu cardápio. O que está esperando?                
                 </div>
-                <div class="col-sm-3 align-self-center testa">
+                <div class="col-sm-3 align-self-end" style="text-align: end;">
                     <ToggleButton @change="triggerToggleEvent" />                
                 </div>
             </div>
@@ -19,24 +19,24 @@
             <form class="testef" onsubmit="event.preventDefault();" ref="formpastel">                
 
                 <div class="row">
-                    <div class="col-xl-5">
+                    <div class="col-xl-5 mt-2">
                         <div class="form-group">
                             <Input id="titulo" class="form-control" name="titulo" v-model="titulo" placeholder="Título do pedido" />
                         </div>
                     </div>
-                    <div class="col-xl-5">        
+                    <div class="col-xl-5 mt-2">        
                         <div class="form-group">
                             <Input id="sabor"  class="form-control" name="sabor"  v-model="sabor"  placeholder="Sabor"/>
                         </div>
                     </div>
-                    <div class="col-xl">
+                    <div class="col-xl mt-2">
                         <div class="form-group">
                             <Input id="preco"  class="form-control" name="preco" v-model="preco" v-money="money" />
                         </div>
                     </div>
                 </div>
 
-                <div class="row mt-3">
+                <div class="row mt-4">
                     <div class="col">
                         <div class="form-group">
                             <Textarea id="descricao" name="descricao" class="form-control" v-model="descricao" placeholder="Descrição" />
@@ -44,7 +44,7 @@
                     </div>                    
                 </div>
 
-                <div class="row mt-3">
+                <div class="row mt-4">
                     <div class="col">
                         <div class="form-group dropbox" v-if="imageData==null"> 
                             <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />
@@ -52,7 +52,7 @@
                         </div> 
                         <div class="form-group dropbox" v-else>                                       
                             <input type="file" accept="image/*" class="input-file form-control" @change="onUpload" />                 
-                            <p><img class="" width="180" height="180" :src="imagem">                
+                            <p> <img class="" width="180" height="180" :src="imagem">    <br> <br>             
                             Clique para localizar outra imagem.</p>
                         </div>
                     </div>
@@ -60,36 +60,47 @@
                 <ClearButton @clearInputs="clearForm"/>
                 <SubmitButton @sendForm="createItem" />
 
-                <!-- Erros de campos obrigatórios -->
-                <div class="warning" v-if="errors.length">   Os seguintes campos precisam ter valor:                 
-                    <div class="warning__errors"> 
-                        <div class="" v-for="error in errors" :key="error">{{ error }}</div> 
-                    </div>
-                </div>
+                
                 
             </form>
-            <Division />
-        <FilterButton @input="readItem" v-model="filtro"/>
         </div>
+
+
+        <!-- Erros de campos obrigatórios -->
+        <div class="warning" v-if="errors.length">   Os seguintes campos precisam ter valor:                 
+            <div class="warning__errors"> 
+                <div class="" v-for="error in errors" :key="error">{{ error }}</div> 
+            </div>
+        </div>
+
+
+        <Division />
+
+
+        <FilterButton @input="readItem" v-model="filtro"/>
+
 
         <!-- Card de item adicionado -->
                 <div class="no-item" v-if="!comidasData.length">
                     <i class="bi bi-search"></i>
                     <h3>Nenhum item cadastrado</h3>
-                    
                 </div>
 
                 <div class="card" v-for="comida in comidasData" :key="comida.id">
                     <div class="item">
-                        <div class="item-header">
-                            <p class="titulo-pedido">"{{ comida.titulo }}"</p>
-                            <p class="preco-pedido">{{ comida.preco }}</p>
+                        <div class="item-header row d-flex">
+                            <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                            <p class="preco-pedido col-sm-3 ">{{ comida.preco }}</p>
                         </div>
-                        <div >                  
+                        <div>                  
                             <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
                         </div>
-                        <p class="sabor-pedido">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
-                        <p class="descricao-pedido">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>         
+                        <div class="sabor-pedido row d-flex">
+                            <p>Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                        </div>
+                        <div class="descricao-pedido row d-flex">
+                            <p>Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                        </div>       
                         <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
 
                         <!-- Área de edição dos itens -->
@@ -98,9 +109,9 @@
                             <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
                             <input type="text" class="sabor-update" v-model="comida.sabor">            
                             <input type="text" class="descricao-update" v-model="comida.descricao">
-                            <!--<div class="dropbox-update">
+                            <!-- <div class="dropbox-update">
                                 <input type="file" accept="image/*" class="input-update" @change="onUpload" />
-                            </div>-->
+                            </div> -->
                             <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
                             <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
                         </div>
@@ -155,7 +166,6 @@ export default {
               masked: false 
             },
             // Dados img
-            imageloading: 'Carregando...',
             imageData: null,
             imgItem: '',
             imagem: ''
@@ -330,7 +340,7 @@ export default {
             })
         },
         readItem() {
-            if (this.imagem == "") {
+            if (this.imagem == "" || this.imgItem == "") {
               this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
             }
 
@@ -407,11 +417,6 @@ export default {
     },
     created() {
       this.readItem();
-    },  
-    mounted() {
-        setTimeout(() => {
-            this.imageloading = 'Imagem carregada! Veja a prévia'
-        }, 6000);
     }
 }
 </script>
@@ -419,127 +424,88 @@ export default {
 <style>
 
 /*--------------- FORM --------------- */
-    .testetaa {
-        
-        line-height: 0cm;
-    }
-
     .mainteste {
-        position: absolute;
+        /* position: relative; */
         left: 0;
         top: 32%;
         width: 100%;
         height: 100%;
     }
 
-    .testy {
-        position: absolute;
-        top: 150%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        text-align: center;
-    }
-
-    .testa {
-        text-align: center;
-    }
-
-    .form-teste {
-        position: absolute;
-        top: 20%;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    .form-card {
+        position: relative; 
+        width: 62%;
+        min-height: 36%;
+        background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 23.8%, #FFF 0, #FFF 75%);
+        box-shadow: 0px 0px 30px #740B0B45;
+        border-radius: 20px;
+        padding: 1.5% 20px 20px 20px;
+        z-index: 1;
+        margin-bottom: 3.5%;
     }
 
     input::placeholder,
     textarea::placeholder {        
         color: #A03400 !important;
-        font: normal normal normal 13.5px/20px Roboto;
-    }
+        font: normal normal normal 1.4rem/20px Roboto;
+    }    
 
-    .form-card {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 61.5%;
-        min-height: 35.3%;
-        background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 24%, #FFF 0, #FFF 75%);
-        box-shadow: 0px 0px 30px #740B0B45;
-        border-radius: 20px;
-        padding: 1.5% 20px 20px 20px;
-    }
-
-    .testef {
+    /* Classe do formulário */
+    .testef { 
         padding-top: 0.6%;
+        padding-bottom: 2%;
     }
 
     .text-header {
-        padding-left: 40px;
-        font: italic normal bold 20.5px/33px Roboto;
-        z-index: 2;        
-    }
-
-    .switch {
-        position: absolute;
-        left: 80%;
-        top: 7%;
-        font: normal normal normal 17px/21px Roboto;
-        letter-spacing: 0px;
-        color: #A03400;
-        z-index: 2;
+        padding-left: 4%;
+        font: italic normal bold 2rem/2.3rem Roboto;  
     }
 
     .warning {
-      position: absolute;
-      top: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 1px solid red;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      color: #E43636;
-      background-color: white;
-      font-weight: bold;
+        /* position: absolute; */
+        top: 110%;
+        left: 50%;
+        width: 20%;
+        border: 1px solid red;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        color: #E43636;
+        background-color: white;
+        font-weight: bold;        
+        margin-bottom: 3.6%;
     }
 
-    .warning__errors {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      font-weight: bold;
-      min-width: 100px;
-    }
+    /* .warning__errors {
+    } */
 
 /*--------------- CARDS --------------- */
     .card {
-        position: relative;
+         /* position: relative;
         top: 800px;
-        left: 0;
+        left: 0;   */
         width: 61.5%;
         height: 31.5%;  
-        border: 0;        
+        border: 0;           
+        background: transparent radial-gradient(closest-side at 50% 50%, #FFFFFF 0%, #FFFFFF 67%, #FFFFFF00 100%) 0% 0% no-repeat padding-box;
+        
     }
 
     .no-item {
-        position: absolute;
-        top: 800px;
+        /* position: absolute; */        
         width: 100%;
         text-align: center;
         color: #cdcdcd;
+        padding-bottom: 2%;
+        background: transparent radial-gradient(closest-side at 50% 50%, #FFFFFF 0%, #FFFFFF 67%, #FFFFFF00 100%) 0% 0% no-repeat padding-box;
     }
 
     .no-item i {
-        font-size: 50px;
+        font-size: 5rem;
     }
 
     .item {
-        position: absolute;
-        top: 0;
+        position: relative;
         left: 11%;
         width: 89%;
         height: 75.5%;        
@@ -547,36 +513,41 @@ export default {
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
         opacity: 1;
+        margin: 0;
+        margin-bottom: 5%;
     }
 
     .titulo-pedido {
-        position: absolute;
+        /* position: absolute; */
         top: 9%;
-        font: italic normal bold 3vw/37px Roboto;
+        font: italic normal bold 3rem/4rem Roboto;
         letter-spacing: 0px;
         color: #FFCA00;
-        padding-left: 12.2%;
-    }
+        padding-left: 9%;
+        margin-top: 2%;
+        margin-bottom: 4.5%;  
+        }
 
     .preco-pedido {
-        position: absolute;
+        /* position: absolute; */
         top: 9%;
         left: 86%;
-        font: italic normal bold 24px/37px Roboto;
+        font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 0px;
-        color: #FFFFFF;
+        color: #FFFFFF;        
+        margin-top: 2%;
+        margin-bottom: 4.5%;  
     }
 
     .sabor-pedido {
-        position: absolute;
+        /* position: absolute; */
         top: 103px;
         left: 0;
-        text-align: center;
-        font: italic normal bold 23px/37px Roboto;
+        font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 1px;
         color: #A03400;
         opacity: 1;
-        padding-left: 110px;
+        padding-left: 9%;
     }
 
     .pedido-res {
@@ -585,15 +556,15 @@ export default {
     }
 
     .descricao-pedido {
-        position: absolute;
+        /* position: absolute; */
         top: 155px;
         left: 0;
-        text-align: center;
-        font: italic normal bold 23px/37px Roboto;
+        font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 0px;
         color: #A03400;
         opacity: 1;
-        padding-left: 110px;
+        padding-left: 9%;
+        margin-bottom: 1.5%;
     }
 
     .imagem-item {
@@ -602,8 +573,9 @@ export default {
         left: -12.3%;
         transform: translate(0%, -50%);
         width: 20.1%;
-        max-width: 180px;
-        max-height: 180px;
+        height: auto;
+        width: 17.1%;
+        height: 79.8%;
         background-color: #FFF;
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 10px;
@@ -611,56 +583,50 @@ export default {
     }
 
     .del {
-      position: absolute;
-      top: 90%;
-      left: 98%;
-      border: 0;
-      border-radius: 5px;
-      background-color: #E43636;
-      height: 35px;
-      width: 35px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 20px;
+        position: absolute;
+        top: 90%;
+        left: 98%;
+        border: 0;
+        border-radius: 5px;
+        background-color: #E43636;
+        height: 15.2%;
+        width: 3.3%;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1.5rem;
     }
 
     .del:hover {     
-      border: 1px solid;
-      outline-color: black;
-      outline-offset: 15px;
+        border: 1px solid;
+        outline-color: black;
+        outline-offset: 15px;
     }
 
     .upd {
-      position: absolute;
-      top: 90%;
-      left: 94%;
-      border: 0;
-      border-radius: 5px;
-      background-color: #a7a7a7;
-      height: 35px;
-      width: 35px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        position: absolute;
+        top: 90%;
+        left: 94%;
+        border: 0;
+        border-radius: 5px;
+        background-color: #a7a7a7;
+        height: 15.2%;
+        width: 3.3%;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .upd:hover {
-      border: 1px solid;
-      outline-color: black;
-      outline-offset: 15px;
+        border: 1px solid;
+        outline-color: black;
+        outline-offset: 15px;
     }
 
     #preco {
-      color: #A03400 !important;
-    }
-
-    .reais {
-      position: absolute;
-      left: 87.5%;
-      top: 2.7%;
+        color: #A03400 !important;
     }
 
     .upd-btn {
@@ -668,33 +634,32 @@ export default {
     }
 
 /*--------------- UPDATE CARDS --------------- */
-
     .titulo-update {
         position: absolute;
-        top: 60px;
-        left: 110px;
-        width: 500px;
+        top: 27%;
+        left: 9%;
+        width: 30%;
     }
 
     .preco-update {
         position: absolute;
-        top: 60px;
-        left: 900px;
-        width: 170px;
+        top: 27%;
+        right: 0;
+        width: 20;
     }
 
     .sabor-update {
         position: absolute;
-        top: 135px;
-        left: 110px;
-        width: 500px;
+        top: 63%;
+        left: 9%;
+        width: 50%;
     }
 
     .descricao-update {
         position: absolute;
-        top: 190px;
-        left: 110px;
-        width: 500px;
+        top: 87%;
+        left: 9%;
+        width: 50%;
     }
 
     .input-update {
@@ -723,15 +688,15 @@ export default {
 
     .save-btn {
         position: absolute;
-        top: 199px;
-        left: 920px;
-        width: 78px;
-        height: 35px;
+        top: 90%;
+        right: 10%;
+        width: 11%;
+        height: 15.5%;
         background-color: #4CAF50;
         border: 0;
         color: white;
         text-align: center;
-        font-size: 16px;
+        font-size: 1.6rem;
         cursor: pointer;
         border-radius: 5px;
     }
@@ -742,16 +707,16 @@ export default {
 
     .cancel-btn {
         position: absolute;
-        top: 199px;
-        left: 1005px;
-        width: 79px;
-        height: 35px;
+        top: 90%;
+        right: -2%;
+        width: 11%;
+        height: 15.5%;
         z-index: 10;  
         background-color: #c9c9c9;
         border: 0;
         color: black;
         text-align: center;
-        font-size: 16px;
+        font-size: 1.6rem;
         cursor: pointer;
         border-radius: 5px;
     }
@@ -774,17 +739,17 @@ export default {
         border: 1px solid #E43636;
         border-radius: 10px;
         opacity: 1;
-        font: normal normal normal 13.7px/21px Roboto;
+        font: normal normal normal 1.4rem/21px Roboto;
         display: flex;
         align-items: center;
         color: #A03400;
-        padding-top: 10px;
-        padding-bottom: 10px;
     }
 
     .dropbox p {
         text-align: center;
         line-height: 25px;
+        display: block;
+        margin-top: 2%;
     }
 
     .dropbox img {
@@ -802,71 +767,7 @@ export default {
     }
 
     .bi.bi-image {
-        font-size: 46px;
+        font-size: 5rem;
         color: #E43636;
     }
-
-/*--------------- MODAL IMG --------------- */
-    .modal {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: rgba(0,0,0,0.8);
-        z-index: 99999;
-        opacity:0;
-        -webkit-transition: opacity 400ms ease-in;
-        -moz-transition: opacity 400ms ease-in;
-        transition: opacity 400ms ease-in;
-        pointer-events: none;
-    }
-
-    .modal:target {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .modal > div {
-        width: 1300px;
-        height: 300px;
-        position: relative;
-        margin: 15% auto;
-        background: #fff;
-    }
-
-    .preview {
-        border-radius: 10px;
-        position: absolute;
-        top: 61px;
-        left: 50px;
-    }
-
-    .fechar {
-        position: absolute;
-        width: 30px;
-        right: -15px;
-        top: -20px;
-        text-align: center;
-        line-height: 30px;
-        margin-top: 5px;
-        background: #ff4545;
-        border-radius: 50%;
-        font-size: 16px;
-        color: #8d0000;
-    }
-
-    .item-modal {
-        position: absolute;
-        top: 40px;
-        left: 160px;
-        width: 1070px;
-        height: 221px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
-        box-shadow: 0px 0px 30px #740B0B45;
-        border-radius: 20px;
-        opacity: 1;
-    }
-
 </style>

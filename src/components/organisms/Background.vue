@@ -1,21 +1,17 @@
 <template>
     
-      <!--  <Gradient /> -->
-        <Images />
-      <!--  <Division /> -->
-    
+      <div> <Gradient />
+        <Images />    </div>
 </template>
 
 <script>
-//import Gradient from '@/components/atoms/Gradient.vue';
-//import Division from '@/components/atoms/Division.vue';
+import Gradient from '@/components/atoms/Gradient.vue';
 import Images from '@/components/molecules/Images.vue';
 
 export default {
     name: 'Background',
     components: {
-       // Gradient,
-      //  Division,
+        Gradient,
         Images
     }
 }

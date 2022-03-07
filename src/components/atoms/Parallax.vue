@@ -1,8 +1,8 @@
 <template>  
-    <kinesis-container class="parallax-img">              
+    <kinesis-container class="parallax-img d-none d-xxl-block">              
         <kinesis-element :strength="12"> 
             <div>
-                <img alt="parallax-header" src="@/assets/img/pastel-paralax.png">
+                <img class="parallax-header" alt="parallax-header" src="@/assets/img/pastel-paralax.png">
             </div>
         </kinesis-element>      
     </kinesis-container>
@@ -17,10 +17,11 @@ export default {
 <style scoped>  
     .parallax-img {
         position: absolute;
-        top: -5.5px;
-        left: 44px;
+        top: 0%;
+        left: 0;
         z-index: 1;
         height: 100vh;
         width: 100%;
     }    
+
 </style>

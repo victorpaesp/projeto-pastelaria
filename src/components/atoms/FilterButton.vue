@@ -55,23 +55,23 @@ export default {
 
 <style scoped>
     .filter-btn {
-        position: absolute;
-        top: 180%;
-        left: 70%;
-        z-index: 1;
         width: 30%;
         height: 10%;
         border-radius: 8px;
         display: flex;
         justify-content: space-between;
         background-color: #E43636;
+        margin-bottom: 4%;
     }
 
     label {
         cursor: pointer;
         color: #fff;        
-        padding: 15px 20px;
+        padding: 2.5% 3%;
         border-radius: 8px;
+        z-index: 5;
+        width: 100%;
+        text-align: center;
     }
 
     label span {
@@ -79,8 +79,7 @@ export default {
     }
 
     label input:checked + span {
-        font-weight: 900;
-        font-size: 18px;
+        font-weight: 900;        
     }
 
     input {

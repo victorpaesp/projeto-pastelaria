@@ -20,7 +20,7 @@ export default {
       border: 1px solid #E43636;
       border-radius: 10px;
       padding-left: 19.5px;  
-      font: normal normal normal 13.5px/18px Roboto;
+      font: normal normal normal 1.4rem/18px Roboto;
       padding-top: 10px;
       padding-bottom: 6px;
       resize: none;

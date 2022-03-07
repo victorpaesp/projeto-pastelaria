@@ -1,8 +1,8 @@
 <template>
-    <div class="division">
-        <div class="division__left-line"></div>
-        <div class="division__text-center"> Veja como será apresentado ao cliente </div>
-        <div class="division__right-line"></div>
+    <div class="division row">
+        <div class="division__left-line col-sm-4 align-self-center"></div>
+        <div class="division__text-center col-sm-4"> Veja como será apresentado ao cliente </div>
+        <div class="division__right-line col-sm-4 align-self-center"></div>
     </div>   
 </template>
 
@@ -14,17 +14,17 @@ export default {
 
 <style>  
     .division {
-        position: absolute;
-        top: 150%;
         width: 100%;
+        margin: 0;
+        margin-bottom: 4%;
     }
 
     .division__left-line,
     .division__right-line {
-        position: relative;
         border: 1px solid #E43636;
         opacity: 0.5;
-        width: 50%;
+        width: 33%;
+        margin: 0;
     }
 
     .division__left-line {
@@ -32,15 +32,12 @@ export default {
     }
 
     .division__right-line {
-        right: -50%;
+        left: 0;
     }
 
     .division__text-center {
-        position: absolute;
-        top: 0;
-        left: 0;
         text-align: center;
-        font: italic normal bold 23.5px/29px Roboto;
+        font: italic normal bold 2.3rem/29px Roboto;
         color: #A03400;
     }
 </style>
