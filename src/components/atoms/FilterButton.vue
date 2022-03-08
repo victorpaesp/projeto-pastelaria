@@ -92,4 +92,22 @@ export default {
     label:hover {
         background-color: #9a2a2a;
     }
+
+    @media (max-width: 425px) {
+        .filter-btn {
+            width: 30%;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .filter-btn {
+            width: 30%;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .filter-btn {
+            width: 30%;
+        }
+    }
 </style>

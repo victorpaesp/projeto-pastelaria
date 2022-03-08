@@ -595,7 +595,7 @@ export default {
         /* position: absolute; */
         top: 110%;
         left: 50%;
-        width: 20%;
+        width: 50%;
         border: 1px solid red;
         padding: 10px;
         border-radius: 10px;
@@ -798,6 +798,18 @@ export default {
             height: 11px;
         }
     }
+
+    @media (max-width: 425px){
+        .edit-card input {
+            height: 8px;
+        }
+    }
+
+        @media (max-width: 320px){
+        .cancel-btn {
+            width: 15%;
+        }
+    }
     
     .titulo-update {
         position: absolute;
@@ -854,10 +866,10 @@ export default {
 
     .save-btn {
         position: absolute;
-        top: 90%;
+        top: 88%;
         right: 10%;
-        width: 11%;
-        height: 15.5%;
+        width: 13%;
+        height: 17.5%;
         background-color: #4CAF50;
         border: 0;
         color: white;
@@ -873,10 +885,10 @@ export default {
 
     .cancel-btn {
         position: absolute;
-        top: 90%;
-        right: -2%;
-        width: 11%;
-        height: 15.5%;
+        top: 88%;
+        right: -3.2%;
+        width: 13%;
+        height: 17.5%;
         z-index: 10;  
         background-color: #c9c9c9;
         border: 0;
@@ -941,4 +953,168 @@ export default {
     .swal2-popup {
         font-size: 1.8rem !important;
     }    
+
+
+/*--------------- @MEDIA --------------- */   
+    @media (max-width: 1024px) {
+        .form-card {            
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 21%, #FFF 0, #FFF 75%);
+        }
+        
+    }
+
+    @media (max-width: 768px) {
+        .form-card {            
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19.5%, #FFF 0, #FFF 75%);
+        }
+        
+    }
+    
+    @media (max-width: 575px) {
+        html {
+            font-size: 25.8%;
+        }
+
+        .form-card {     
+            width: 90%;       
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19%, #FFF 0, #FFF 75%);
+        }
+
+        .card {
+            width: 90%;
+        }
+    
+        .item {
+            border-radius: 10px;
+        }
+
+        .titulo-pedido {
+            position: absolute;
+            top: 3.5px;
+            left: 3px;
+            font: italic normal bold 2.5rem/4rem Roboto; 
+        }
+
+        .preco-pedido {
+            font: italic normal bold 2.4rem/4rem Roboto;
+        }
+
+        .imagem-item {
+            height: 65%;
+        }
+
+        .upd {
+            left: 90%;
+            width: 6%;
+        }
+
+        .del {
+            left: 97%;
+            width: 6%;
+        }
+    }
+
+    @media (max-width: 375px) {
+        html {
+            font-size: 25.8%;
+        }
+
+        .form-card {      
+            width: 90%;      
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 17%, #FFF 0, #FFF 75%);
+        }
+
+        .card {
+            width: 90%;
+        }
+
+        .item {
+            border-radius: 10px;
+        }
+
+        .titulo-pedido {
+            position: absolute;
+            top: 3.5px;
+            left: 3px;
+            font: italic normal bold 2.5rem/4rem Roboto; 
+        }
+
+        .preco-pedido {
+            font: italic normal bold 2.1rem/4rem Roboto;
+        }
+
+        .imagem-item {
+            height: 55%;
+        }
+
+        .upd {
+            left: 90%;
+            width: 6%;
+        }
+
+        .del {
+            left: 97%;
+            width: 6%;
+        }
+    }
+
+    @media (max-width: 320px) {
+        html {
+            font-size: 25.8%;
+        }
+
+        .form-card {           
+            width: 90%; 
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19%, #FFF 0, #FFF 75%);
+        }
+
+        .card {
+            width: 90%;
+        }
+
+        .item {
+            border-radius: 10px;
+        }
+
+        .titulo-pedido {
+            position: absolute;
+            top: 3.5px;
+            left: 3px;
+            font: italic normal bold 2.5rem/4rem Roboto; 
+        }
+
+        .preco-pedido {            
+            font: italic normal bold 2rem/4rem Roboto;
+        }
+
+        .sabor-pedido {            
+            font: italic normal bold 2rem/4rem Roboto;
+        }
+
+        .descricao-pedido {            
+            font: italic normal bold 2rem/4rem Roboto;
+        }
+
+        .imagem-item {
+            height: 50%;
+        }
+
+        .upd {
+            left: 90%;
+            width: 6%;
+        }
+
+        .del {
+            left: 97%;
+            width: 6%;
+        }
+
+        .titulo-update {
+            top: 25%;
+        }
+
+        .preco-update {
+            top: 25%;
+        }
+    }
 </style>

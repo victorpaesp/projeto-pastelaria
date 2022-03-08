@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="imagens">
       <Parallax />   
       <img alt="wave-header" src="@/assets/img/wave.png" class="wave"> 
       <img alt="logo-header" src="@/assets/img/Logo.png" class="logo-header">  
@@ -46,5 +46,62 @@ export default {
         top: 180px;
         left: 62%;
         width: 20%;
+    }
+
+    @media (max-width: 425px) {
+        .wave {
+            height: 20%;
+        }
+
+        .logo-header {
+            height: 100%;
+            width: 40%;
+            padding-top: 25px;
+            margin-left: 25.5%;
+        }
+
+        .imagens {
+            height: 80px;
+            margin-bottom: 5%;
+        }
+        
+    }
+
+    @media (max-width: 375px) {
+        .wave {
+            height: 20%;
+        }
+
+        .logo-header {
+            height: 100%;
+            width: 40%;
+            padding-top: 25px;
+            margin-left: 25.5%;
+        }
+
+        .imagens {
+            height: 80px;
+            margin-bottom: 5%;
+        }
+        
+    }
+
+    @media (max-width: 320px) {
+        .wave {
+            height: 20%;
+        }
+
+        .logo-header {
+            height: 100%;
+            width: 40%;
+            padding-top: 25px;
+            margin-left: 25.5%;
+        }
+
+        .imagens {
+            height: 80px;
+            margin-bottom: 5%;
+        }
+        
     }
 </style>

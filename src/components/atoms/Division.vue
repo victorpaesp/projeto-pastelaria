@@ -40,4 +40,31 @@ export default {
         font: italic normal bold 2.3rem/29px Roboto;
         color: #A03400;
     }
+
+    @media (max-width: 575px) {
+        .division__text-center {
+            text-align: center;
+            font: italic normal bold 1.9rem/29px Roboto;
+            color: #A03400;
+            width: 34%;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .division__text-center {
+            text-align: center;
+            font: italic normal bold 1.4rem/29px Roboto;
+            color: #A03400;
+            width: 34%;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .division__text-center {
+            text-align: center;
+            font: italic normal bold 1.4rem/29px Roboto;
+            color: #A03400;
+            width: 34%;
+        }
+    }
 </style>

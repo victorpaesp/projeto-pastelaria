@@ -77,8 +77,8 @@ export default {
         content: "";
         position: absolute;
         display: block;
-        height: 18px;
-        width: 18px;
+        height: 150%;
+        width: 45%;
         border-radius: 50%;
         left: 0;
         top: -3px;

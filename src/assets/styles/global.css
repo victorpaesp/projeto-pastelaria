@@ -44,3 +44,10 @@ body {
         font-size: 25.8%;
     }
 }
+
+
+@media (max-width: 320px) {
+    html {
+        font-size: 25.8%;
+    }
+}
