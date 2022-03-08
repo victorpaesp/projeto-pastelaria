@@ -46,10 +46,10 @@
                 <div class="row mt-4">
                     <div class="col">
                         <div :class="['form-group dropbox', dragging ? 'dropbox-over' : 'form-group dropbox']" 
-                            v-if="imageData==null"
-                            drag-over="handleDragOver"
-                            @dragenter="dragging = true"  
-                            @dragleave="dragging = false"
+                              v-if="imageData==null"
+                              drag-over="handleDragOver"
+                              @dragenter="dragging = true"  
+                              @dragleave="dragging = false"
                         > 
                             <input type="file" accept="image/*" class="input-file form-control" @change="onUpload"/>
                             <p>
@@ -77,7 +77,7 @@
 
         <!-- Erros de campos obrigatórios -->
         <div class="warning" v-if="errors.length">   Os seguintes campos precisam ter valor:                 
-            <div class="warning__errors"> 
+            <div> 
                 <div class="" v-for="error in errors" :key="error">{{ error }}</div> 
             </div>
         </div>
@@ -263,7 +263,7 @@ export default {
         comidas: db.collection("cardapio"),
     },
     directives: {
-      money: VMoney
+        money: VMoney
     },
     components: {
         Input,
@@ -290,12 +290,12 @@ export default {
 
 //--------------- Métodos toggle button
         triggerToggleEvent(value) {
-          this.toggleActive = value;
-          if (value == true) {
-            this.itemTipo = 'Bebida';
-          } else {
-            this.itemTipo = 'Comida';
-          }
+            this.toggleActive = value;
+            if (value == true) {
+                this.itemTipo = 'Bebida';
+            } else {
+                this.itemTipo = 'Comida';
+            }
         },
 
 //--------------- Métodos upload de imagem
@@ -360,34 +360,34 @@ export default {
         },
         editItem(id) {
             db.collection("cardapio")
-              .doc(id)
-              .update({
-                editar: true
-              })        
+                .doc(id)
+                .update({
+                    editar: true
+                })        
         }, 
         cancelEdit(id) {
             db.collection("cardapio")
-              .doc(id)
-              .update({
-                editar: false
-              })
+                .doc(id)
+                .update({
+                    editar: false
+                })
         },
         saveEdit(item) {
             const id = item.id
             db.collection("cardapio")
-              .doc(id)
-              .update({
-                titulo: item.titulo,
-                sabor: item.sabor,
-                preco: item.preco,
-                descricao: item.descricao,
-                editar: false
-                //imgItem: this.imagem
-              })
-              .then(() => {        
-                this.editar = false 
-                this.readItem();        
-              })
+                .doc(id)
+                .update({
+                    titulo: item.titulo,
+                    sabor: item.sabor,
+                    preco: item.preco,
+                    descricao: item.descricao,
+                    editar: false
+                    //imgItem: this.imagem
+                })
+                .then(() => {        
+                    this.editar = false 
+                    this.readItem();        
+                })
               
             this.titulo = "";
             this.sabor = "";
@@ -408,18 +408,18 @@ export default {
               })
             .then((result) => {
                 if(result.value) {
-                  db.collection("cardapio")
-                  .doc(id)
-                  .delete()
-                  .then(() => {
-                      this.$swal({
-                        icon: 'success',
-                        title: 'Item deletado!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                      this.readItem();
-                  })
+                    db.collection("cardapio")
+                    .doc(id)
+                    .delete()
+                    .then(() => {
+                        this.$swal({
+                            icon: 'success',
+                            title: 'Item deletado!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        this.readItem();
+                    })
                 } 
             })
         },
@@ -427,24 +427,26 @@ export default {
             if (this.imgItem == "" || this.imgItem == null) {
                 this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
             }
+
             this.comidasData = [];
-                db.collection("cardapio")
-                .onSnapshot((querySnapshot) => {
-                    this.comidasData = [];
-                    querySnapshot.forEach((doc) => {
-                        this.comidasData.push({
-                            id: doc.id,
-                            titulo: doc.data().titulo,
-                            sabor: doc.data().sabor,
-                            preco: doc.data().preco,
-                            descricao: doc.data().descricao,                        
-                            imgItem: doc.data().imgItem,
-                            itemTipo: doc.data().itemTipo,
-                            editar: doc.data().editar
-                        });
-                    console.log(doc.id, " => ", doc.data());
+            
+            db.collection("cardapio")
+            .onSnapshot((querySnapshot) => {
+                this.comidasData = [];
+                querySnapshot.forEach((doc) => {
+                    this.comidasData.push({
+                        id: doc.id,
+                        titulo: doc.data().titulo,
+                        sabor: doc.data().sabor,
+                        preco: doc.data().preco,
+                        descricao: doc.data().descricao,                        
+                        imgItem: doc.data().imgItem,
+                        itemTipo: doc.data().itemTipo,
+                        editar: doc.data().editar
                     });
-                })
+                console.log(doc.id, " => ", doc.data());
+                });
+            })
             // switch (this.filtro) {
 
             //     case "all": 
@@ -515,29 +517,20 @@ export default {
             // } 
         }
     },
-    // computed: {
-    //     filtered() {
-    //         return Object.keys(this.comidas)
-    //         .filter(id => this.comidas[id].itemTipo === "Comida")
-    //     }
-    // },
-
-
-
     computed: {
-        filterAll: function () {
-            return this.comidasData.filter(function (fod) {
-                return fod.itemTipo == "Bebida";
-            })
-        },
+        // filterAll: function () {
+        //     return this.comidasData.filter(function (fod) {
+        //         return fod.itemTipo == "Bebida";
+        //     })
+        // },
         filterFood: function () {
-            return this.comidasData.filter(function (um) {
-                return um.itemTipo == "Comida";
+            return this.comidasData.filter(function (foods) {
+                return foods.itemTipo == "Comida";
             })
         },
         filterDrink: function () {
-            return this.comidasData.filter(function (dois) {
-                return dois.itemTipo == "Bebida";
+            return this.comidasData.filter(function (drinks) {
+                return drinks.itemTipo == "Bebida";
             })
         }
     },
@@ -613,14 +606,11 @@ export default {
         margin-bottom: 3.6%;
     }
 
-    /* .warning__errors {
-    } */
-
 /*--------------- CARDS --------------- */
     .card {
-         /* position: relative;
+        /* position: relative;
         top: 800px;
-        left: 0;   */
+        left: 0;*/
         width: 61.5%;
         height: 31.5%;  
         border: 0;           

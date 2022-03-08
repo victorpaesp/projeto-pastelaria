@@ -1,7 +1,7 @@
 <template>
-  <div class="">
+  <div>
       <Parallax />   
-      <img alt="logo-header" src="@/assets/img/wave.png" class="wave"> 
+      <img alt="wave-header" src="@/assets/img/wave.png" class="wave"> 
       <img alt="logo-header" src="@/assets/img/Logo.png" class="logo-header">  
       <img alt="pasteis-header" src="@/assets/img/pasteis-img.png" class="pasteis-header d-none d-xxl-block"> 
   </div>
