@@ -46,6 +46,10 @@ export default {
 </script>
 
 <style scoped>
+    label {
+        font-weight: 300;
+    }
+
     .toggle-btn {
         vertical-align: middle;
         user-select: none;
@@ -61,7 +65,7 @@ export default {
         display:inline-block;
         height:12px;
         border-radius:6px;
-        width:40px;
+        width: 40px;
         background: #FFFFFF;
         box-shadow: inset 0 0 1px #FFFFFF;
         position:relative;
@@ -73,8 +77,8 @@ export default {
         content: "";
         position: absolute;
         display: block;
-        height: 18px;
-        width: 18px;
+        height: 150%;
+        width: 45%;
         border-radius: 50%;
         left: 0;
         top: -3px;
@@ -107,6 +111,6 @@ export default {
     }
 
     .ativo {
-        font-weight: 900;
+        font-weight: bold;
     }
 </style>

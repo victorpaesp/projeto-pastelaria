@@ -1,20 +1,22 @@
 <template>
     <div class="filter-btn">
-            <label for="all">
-                <input type="radio" name="radio" value="all" id="all" checked="checked"
-                @change="$emit('input', 'all')" />
-                <span>Mostrar tudo</span>
-            </label>
-            <label for="food">
-                <input type="radio" name="radio" value="food" id="food" 
-                @change="$emit('input', 'food')" />
-                <span>Comidas</span>
-            </label>
-            <label for="drink">
-                <input type="radio" name="radio" value="drink" id="drink"
-                @change="$emit('input', 'drink')" />
-                <span>Bebidas</span>
-            </label>
+        <input type="radio" class="test" name="radio" value="all" id="all" checked="checked"
+        @change="$emit('input', 'all')" />     
+        <label for="all">
+            <span>Tudo</span>
+        </label>
+
+        <input type="radio" name="radio" value="food" id="food" 
+        @change="$emit('input', 'food')" />
+        <label for="food">            
+            <span>Comidas</span>
+        </label>
+
+        <input type="radio" name="radio" value="drink" id="drink"
+        @change="$emit('input', 'drink')" />
+        <label for="drink">
+            <span>Bebidas</span>
+        </label>
     </div>
 </template>
 
@@ -55,32 +57,32 @@ export default {
 
 <style scoped>
     .filter-btn {
-        position: absolute;
-        top: 860px;
-        left: 1190px;
-        z-index: 1;
-        width: 350px;
-        margin: 20px auto;
+        width: 20%;
+        height: 10%;
         border-radius: 8px;
         display: flex;
-        justify-content: space-between;
         background-color: #E43636;
+        margin-bottom: 4%;
+    }
+
+    .filter-btn input[type="radio"]:checked + label {
+        background-color: #9a2a2a;
     }
 
     label {
         cursor: pointer;
         color: #fff;        
-        padding: 15px 20px;
+        padding: 2.5% 3%;
+        margin: 1%;
         border-radius: 8px;
+        z-index: 5;
+        width: 100%;
+        text-align: center;
     }
 
     label span {
         color: #FFF;
-    }
-
-    label input:checked + span {
-        font-weight: 900;
-        font-size: 18px;
+        font-size: 1.5rem;
     }
 
     input {
@@ -89,5 +91,23 @@ export default {
 
     label:hover {
         background-color: #9a2a2a;
+    }
+
+    @media (max-width: 425px) {
+        .filter-btn {
+            width: 30%;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .filter-btn {
+            width: 30%;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .filter-btn {
+            width: 30%;
+        }
     }
 </style>

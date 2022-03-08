@@ -1,8 +1,8 @@
 <template>
-    <div class="division">
-        <div class="division__left-line"></div>
-        <div class="division__text-center"> Veja como será apresentado ao cliente </div>
-        <div class="division__right-line"></div>
+    <div class="division row">
+        <div class="division__left-line col-sm-4 align-self-center"></div>
+        <div class="division__text-center col-sm-4"> Veja como será apresentado ao cliente </div>
+        <div class="division__right-line col-sm-4 align-self-center"></div>
     </div>   
 </template>
 
@@ -14,33 +14,57 @@ export default {
 
 <style>  
     .division {
-        position: absolute;
-        top: 852px;
+        width: 100%;
+        margin: 0;
+        margin-bottom: 4%;
     }
 
     .division__left-line,
     .division__right-line {
-        position: absolute;
-        width: 705px;
         border: 1px solid #E43636;
         opacity: 0.5;
+        width: 33%;
+        margin: 0;
     }
 
     .division__left-line {
         left: 0;
     }
 
-    .division__right-line { 
-        left: 1215px;
+    .division__right-line {
+        left: 0;
     }
 
     .division__text-center {
-        position: absolute;
-        top: -12px;
-        left: 755px;
-        width: 410px;
         text-align: center;
-        font: italic normal bold 23.5px/29px Roboto;
+        font: italic normal bold 2.3rem/29px Roboto;
         color: #A03400;
+    }
+
+    @media (max-width: 575px) {
+        .division__text-center {
+            text-align: center;
+            font: italic normal bold 1.9rem/29px Roboto;
+            color: #A03400;
+            width: 34%;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .division__text-center {
+            text-align: center;
+            font: italic normal bold 1.4rem/29px Roboto;
+            color: #A03400;
+            width: 34%;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .division__text-center {
+            text-align: center;
+            font: italic normal bold 1.4rem/29px Roboto;
+            color: #A03400;
+            width: 34%;
+        }
     }
 </style>

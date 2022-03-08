@@ -1,97 +1,213 @@
 <template>
-    <div>
-        <!-- Card principal -->
+    <div class="mainteste">
+
+        <!-- Card -->
         <div class="form-card">
-            <div class="form-header">
-                <p class="text-header">Monte aqui o seu cardápio. O que está esperando?</p> 
-                <p class="switch"><ToggleButton @change="triggerToggleEvent" /></p>
+
+            <!-- Card Header -->
+            <div class="row d-flex flex-wrap-reverse">
+                <div class="col-sm-9 text-header mb-2">                        
+                    Monte aqui o seu cardápio. O que está esperando?                
+                </div>
+                <div class="col-sm-3 align-self-end" style="text-align: end;">
+                    <ToggleButton @change="triggerToggleEvent" />                
+                </div>
             </div>
 
-            <!-- Formulário -->
-            <form onsubmit="event.preventDefault();" id="form-pastel" ref="formpastel"> 
-                <div class="start-row">
-                    <Input id="titulo" name="titulo" v-model="titulo" placeholder="Título do pedido" />
-                    <Input id="sabor"  name="sabor"  v-model="sabor"  placeholder="Sabor"/>
-                    <Input id="preco"  name="preco"  v-model="preco" v-money="money" /> <div class="reais">R$</div>
-                </div>
-                <div class="middle-row">
-                    <Textarea id="descricao" name="descricao" v-model="descricao" placeholder="Descrição" />
-                </div>
-                <div class="end-row">              
-                    <div class="dropbox">
-                        <input type="file" accept="image/*" class="input-file" @change="onUpload" />
-                        <p><i class="bi bi-image"></i> <br> Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.</p>
+            <!-- Card Form -->
+            <form class="form" onsubmit="event.preventDefault();" ref="formpastel">                
+
+                <div class="row">
+                    <div class="col-xl-5 mt-2">
+                        <div class="form-group">
+                            <Input id="titulo" class="form-control" name="titulo" v-model="titulo" placeholder="Título do pedido" />
+                        </div>
                     </div>
-
-                    <!-- Carregamento da prévia de como ficará a imagem no card -->
-                    <div v-if="imageData!=null">   
-                      <br> 
-                        <a href="#abrirModal">{{ imageloading }}</a>       
-                        <div class="modal" id="abrirModal"> 
-                          <div>
-                              <a href="#fechar" title="Fechar" class="fechar">x</a>         
-                              <div class="item-modal">
-                                  <div class="item-header">
-                                      <p class="titulo-pedido">"{{ titulo }}"</p>
-                                      <p class="preco-pedido">R$ {{ preco }}</p>
-                                  </div>
-                                  <div class="imagem-item"><img> </div>
-                                  <p class="sabor-pedido">Sabor: {{ sabor }}<span class="pedido-res"></span></p>
-                                  <p class="descricao-pedido">Descrição: {{ descricao }}<span class="pedido-res"></span></p>         
-                                  <button class="upd"><i class="bi bi-pencil-square upd-btn"></i></button>
-                                  <button class="del">x</button>
-                              </div>
-                              <img class="preview" height="180" width="180" :src="imagem">
-                              <br>
-                          </div>
-                        </div>  
-                    </div> 
-                </div>
-                <ClearButton />
-                <SubmitButton @sendForm="createItem" />
-
-                <!-- Erros de campos obrigatórios -->
-                <div class="warning" v-if="errors.length">                    
-                    <div class="warning__errors"> <i class="bi bi-exclamation-triangle"></i> Os seguintes campos precisam ter valor:
-                        <p v-for="error in errors" :key="error">{{ error }}</p> 
+                    <div class="col-xl-5 mt-2">        
+                        <div class="form-group">
+                            <Input id="sabor"  class="form-control" name="sabor"  v-model="sabor"  placeholder="Sabor"/>
+                        </div>
+                    </div>
+                    <div class="col-xl mt-2">
+                        <div class="form-group">
+                            <Input id="preco"  class="form-control" name="preco" v-model="preco" v-money="money" />
+                        </div>
                     </div>
                 </div>
+
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="form-group">
+                            <Textarea id="descricao" name="descricao" class="form-control" v-model="descricao" placeholder="Descrição" />
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col">
+                        <div :class="['form-group dropbox', dragging ? 'dropbox-over' : 'form-group dropbox']" 
+                              v-if="imageData==null"
+                              drag-over="handleDragOver"
+                              @dragenter="dragging = true"  
+                              @dragleave="dragging = false"
+                        > 
+                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload"/>
+                            <p>
+                                <i class="bi bi-image"></i> 
+                                <br> 
+                                Jogue aqui o arquivo de imagem do seu pastel ou clique para localizar a pasta.
+                            </p>
+                        </div> 
+                        <div class="form-group dropbox" v-else>                                       
+                            <input type="file" accept="image/*" class="input-file form-control" @change="onUpload"/>                 
+                            <p> 
+                                <img class="" width="180" height="180" :src="imagem">    
+                                <br>
+                                <br>             
+                                Clique para localizar outra imagem.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <ClearButton @clearInputs="clearForm"/>
+                <SubmitButton @sendForm="createItem" />             
             </form>
         </div>
 
+
+        <!-- Erros de campos obrigatórios -->
+        <div class="warning" v-if="errors.length">   Os seguintes campos precisam ter valor:                 
+            <div> 
+                <div class="" v-for="error in errors" :key="error">{{ error }}</div> 
+            </div>
+        </div>
+
+
+        <Division />
+
+
         <FilterButton @input="readItem" v-model="filtro"/>
 
-        <!-- Card de item adicionado -->
-        <div class="card" v-for="comida of comidasData" :key="comida.id">
-            <div class="item">
-                <div class="item-header">
-                      <p class="titulo-pedido">"{{ comida.titulo }}"</p>
-                      <p class="preco-pedido">R$ {{ comida.preco }}</p>
-                </div>
-                <div>                  
-                    <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
-                </div>
-                <p class="sabor-pedido">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
-                <p class="descricao-pedido">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>         
-                <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
 
-                <!-- Área de edição dos itens -->
-                <div class="edit-card" v-if="editar">
-                    <input type="text" class="titulo-update" v-model="comida.titulo">
-                    <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
-                    <input type="text" class="sabor-update" v-model="comida.sabor">            
-                    <input type="text" class="descricao-update" v-model="comida.descricao">
-                    <!--<div class="dropbox-update">
-                        <input type="file" accept="image/*" class="input-update" @change="onUpload" />
-                    </div>-->
-                    <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
-                    <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+        <!-- Card de item adicionado -->
+        <div class="no-item" v-if="!comidasData.length">
+            <i class="bi bi-search"></i>
+            <h3>Nenhum item cadastrado</h3>
+        </div>
+
+
+        <!-- Todos os itens -->
+        <div v-if="this.filtro == 'all'">
+            <div class="card" v-for="comida in comidasData" :key="comida.id">
+                <div class="item">
+                    <div class="item-header row d-flex">
+                        <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                        <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
+                    </div>
+                    <div>                  
+                        <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                    </div>
+                    <div class="sabor-pedido row d-flex">
+                        <p class="pedido-title">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                    </div>
+                    <div class="descricao-pedido row d-flex">
+                        <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                    </div>       
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+
+                    <!-- Área de edição dos itens -->
+                    <div class="edit-card" v-if="comida.editar == true">
+                        <input type="text" class="titulo-update" v-model="comida.titulo">
+                        <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                        <input type="text" class="sabor-update" v-model="comida.sabor">            
+                        <input type="text" class="descricao-update" v-model="comida.descricao">
+                        <!-- <div class="dropbox-update">
+                            <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                        </div> -->
+                        <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                        <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                    </div>
+                    
+                    <button class="del" @click="deleteItem(comida.id)">x</button>
                 </div>
-                
-                <button class="del" @click="deleteItem(comida.id)">x</button>
+            </div>
+        </div>
+
+        <!-- Filtrado (apenas comidas) -->
+        <div v-if="this.filtro == 'food'">
+            <div class="card" v-for="comida in filterFood" :key="comida.id">
+                <div class="item">
+                    <div class="item-header row d-flex">
+                        <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                        <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
+                    </div>
+                    <div>                  
+                        <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                    </div>
+                    <div class="sabor-pedido row d-flex">
+                        <p class="pedido-title">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                    </div>
+                    <div class="descricao-pedido row d-flex">
+                        <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                    </div>       
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+
+                    <!-- Área de edição dos itens -->
+                    <div class="edit-card" v-if="comida.editar == true">
+                        <input type="text" class="titulo-update" v-model="comida.titulo">
+                        <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                        <input type="text" class="sabor-update" v-model="comida.sabor">            
+                        <input type="text" class="descricao-update" v-model="comida.descricao">
+                        <!-- <div class="dropbox-update">
+                            <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                        </div> -->
+                        <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                        <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                    </div>
+                    
+                    <button class="del" @click="deleteItem(comida.id)">x</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtrado (apenas bebidas) -->
+        <div v-if="this.filtro == 'drink'">
+            <div class="card" v-for="comida in filterDrink" :key="comida.id">
+                <div class="item">
+                    <div class="item-header row d-flex">
+                        <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
+                        <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
+                    </div>
+                    <div>                  
+                        <img class="imagem-item" height="100%" width="100%" :src="comida.imgItem"> 
+                    </div>
+                    <div class="sabor-pedido row d-flex">
+                        <p class="pedido-title">Sabor: <span class="pedido-res">{{ comida.sabor }}</span></p>
+                    </div>
+                    <div class="descricao-pedido row d-flex">
+                        <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
+                    </div>       
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+
+                    <!-- Área de edição dos itens -->
+                    <div class="edit-card" v-if="comida.editar == true">
+                        <input type="text" class="titulo-update" v-model="comida.titulo">
+                        <input type="text" class="preco-update" v-model="comida.preco" v-money="money">                
+                        <input type="text" class="sabor-update" v-model="comida.sabor">            
+                        <input type="text" class="descricao-update" v-model="comida.descricao">
+                        <!-- <div class="dropbox-update">
+                            <input type="file" accept="image/*" class="input-update" @change="onUpload" />
+                        </div> -->
+                        <button class="save-btn" @click="saveEdit(comida)">Salvar</button>
+                        <button class="cancel-btn" @click="cancelEdit(comida.id)">Cancelar</button>
+                    </div>
+                    
+                    <button class="del" @click="deleteItem(comida.id)">x</button>
+                </div>
             </div>
         </div>
     </div>
+    
 </template>
 
 <script>
@@ -101,6 +217,7 @@ import Input from '@/components/atoms/Input.vue';
 import Textarea from '@/components/atoms/Textarea.vue';
 import FilterButton from '@/components/atoms/FilterButton.vue';
 import ToggleButton from '@/components/atoms/ToggleButton.vue';
+import Division from '@/components/atoms/Division.vue';
 import firebase from "../../firebaseInit";
 import {VMoney} from 'v-money'
 
@@ -131,18 +248,22 @@ export default {
             money: {
               decimal: ',',
               thousands: '.',
+              prefix: 'R$ ',
               precision: 2,
               masked: false 
             },
             // Dados img
-            imageloading: 'Carregando...',
             imageData: null,
             imgItem: '',
-            imagem: ''
+            imagem: '',
+            dragging: false
         }
     },
+    firestore: {
+        comidas: db.collection("cardapio"),
+    },
     directives: {
-      money: VMoney
+        money: VMoney
     },
     components: {
         Input,
@@ -150,18 +271,31 @@ export default {
         ClearButton,
         SubmitButton,
         ToggleButton,
-        FilterButton
+        FilterButton,
+        Division
     },
     methods: {
 
+//--------------- Método de limpeza do formulário        
+        clearForm() {
+            this.titulo = "",
+            this.sabor = "",
+            this.preco = "R$ 0,00",
+            this.descricao = "",
+            this.imageData = null,
+            this.imgData = "",
+            this.dragging = false,
+            this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
+        },
+
 //--------------- Métodos toggle button
         triggerToggleEvent(value) {
-          this.toggleActive = value;
-          if (value == true) {
-            this.itemTipo = 'Bebida';
-          } else {
-            this.itemTipo = 'Comida';
-          }
+            this.toggleActive = value;
+            if (value == true) {
+                this.itemTipo = 'Bebida';
+            } else {
+                this.itemTipo = 'Comida';
+            }
         },
 
 //--------------- Métodos upload de imagem
@@ -187,12 +321,26 @@ export default {
 
 //--------------- Métodos CRUD
         createItem() {
-            if (this.titulo && this.sabor && this.preco != '0,00') {
+            if (this.titulo && this.sabor && this.preco != 'R$ 0,00') {
                 db.collection("cardapio")
-                .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem})
+                .add({itemTipo: this.itemTipo, titulo: this.titulo, sabor: this.sabor, preco: this.preco, descricao: this.descricao, imgItem: this.imagem, editar: this.editar})
                 .then(() => {
+                    this.$swal({
+                        icon: 'success',
+                        title: 'Item criado!',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
                     console.log("Item criado");
                     this.readItem();
+                    this.titulo = "",
+                    this.sabor = "",
+                    this.imgItem = null,
+                    this.imageData = null,
+                    this.dragging = false,
+                    this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd',
+                    this.$refs.formpastel.reset();
+                    
                 })
             }
             this.errors = [];
@@ -205,47 +353,41 @@ export default {
               this.errors.push('Sabor')
             }
 
-            if (this.preco == '0,00') {
+            if (this.preco == 'R$ 0,00') {
               this.errors.push('Preço')
             }
         
-            this.titulo = "";
-            this.sabor = "";
-            this.imageData = null;
-            this.$refs.formpastel.reset();
         },
         editItem(id) {
             db.collection("cardapio")
-              .doc(id)
-              .update({
-                editar: this.editar
-              })
-              this.editar = !this.editar;
+                .doc(id)
+                .update({
+                    editar: true
+                })        
         }, 
         cancelEdit(id) {
             db.collection("cardapio")
-              .doc(id)
-              .update({
-                editar: !this.editar
-              })
-              this.editar = !this.editar              
-              this.readItem();
+                .doc(id)
+                .update({
+                    editar: false
+                })
         },
         saveEdit(item) {
-          const id = item.id
+            const id = item.id
             db.collection("cardapio")
-              .doc(id)
-              .update({
-                titulo: item.titulo,
-                sabor: item.sabor,
-                preco: item.preco,
-                descricao: item.descricao,
-                //imgItem: this.imagem
-              })
-              .then(() => {
-                this.readItem();                
-                this.editar = !this.editar  
-              })
+                .doc(id)
+                .update({
+                    titulo: item.titulo,
+                    sabor: item.sabor,
+                    preco: item.preco,
+                    descricao: item.descricao,
+                    editar: false
+                    //imgItem: this.imagem
+                })
+                .then(() => {        
+                    this.editar = false 
+                    this.readItem();        
+                })
               
             this.titulo = "";
             this.sabor = "";
@@ -266,284 +408,310 @@ export default {
               })
             .then((result) => {
                 if(result.value) {
-                  db.collection("cardapio")
-                  .doc(id)
-                  .delete()
-                  .then(() => {
-                      console.log("Item deletado");
-                      this.readItem();
-                  })
+                    db.collection("cardapio")
+                    .doc(id)
+                    .delete()
+                    .then(() => {
+                        this.$swal({
+                            icon: 'success',
+                            title: 'Item deletado!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        this.readItem();
+                    })
                 } 
             })
         },
         readItem() {
-            if (this.imagem == "") {
-              this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
+            if (this.imgItem == "" || this.imgItem == null) {
+                this.imagem = 'https://firebasestorage.googleapis.com/v0/b/pastelaria-9dc69.appspot.com/o/no-img.png?alt=media&token=230134a7-2db0-43ee-a445-a129c683a0fd'
             }
 
-            switch (this.filtro) {
+            this.comidasData = [];
+            
+            db.collection("cardapio")
+            .onSnapshot((querySnapshot) => {
+                this.comidasData = [];
+                querySnapshot.forEach((doc) => {
+                    this.comidasData.push({
+                        id: doc.id,
+                        titulo: doc.data().titulo,
+                        sabor: doc.data().sabor,
+                        preco: doc.data().preco,
+                        descricao: doc.data().descricao,                        
+                        imgItem: doc.data().imgItem,
+                        itemTipo: doc.data().itemTipo,
+                        editar: doc.data().editar
+                    });
+                console.log(doc.id, " => ", doc.data());
+                });
+            })
+            // switch (this.filtro) {
 
-                case "all": 
-                    this.comidasData = [];
-                    db.collection("cardapio")
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            this.comidasData.push({
-                                id: doc.id,
-                                titulo: doc.data().titulo,
-                                sabor: doc.data().sabor,
-                                preco: doc.data().preco,
-                                descricao: doc.data().descricao,                        
-                                imgItem: doc.data().imgItem,
-                                itemTipo: doc.data().itemTipo,
-                            });
-                        console.log(doc.id, " => ", doc.data());
-                        });
-                    })
-                    break;
+            //     case "all": 
+            //         this.comidasData = [];
+            //         db.collection("cardapio")
+            //         .onSnapshot((querySnapshot) => {
+            //             this.comidasData = [];
+            //             querySnapshot.forEach((doc) => {
+            //                 this.comidasData.push({
+            //                     id: doc.id,
+            //                     titulo: doc.data().titulo,
+            //                     sabor: doc.data().sabor,
+            //                     preco: doc.data().preco,
+            //                     descricao: doc.data().descricao,                        
+            //                     imgItem: doc.data().imgItem,
+            //                     itemTipo: doc.data().itemTipo,
+            //                     editar: doc.data().editar
+            //                 });
+            //             console.log(doc.id, " => ", doc.data());
+            //             });
+            //         })
+            //         break;
 
-                case "food":
-                    this.comidasData = [];
-                    db.collection("cardapio").where("itemTipo", "==", "Comida")
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            this.comidasData.push({
-                                id: doc.id,
-                                titulo: doc.data().titulo,
-                                sabor: doc.data().sabor,
-                                preco: doc.data().preco,
-                                descricao: doc.data().descricao,                        
-                                imgItem: doc.data().imgItem,
-                                itemTipo: doc.data().itemTipo,
-                            });
-                            console.log(doc.id, " => ", doc.data());
-                        });
-                    })
-                    break;
+            //     case "food":
+            //         this.comidasData = [];
+            //         db.collection("cardapio").where("itemTipo", "==", "Comida")
+            //         .onSnapshot((querySnapshot) => {
+            //             this.comidasData = [];
+            //             querySnapshot.forEach((doc) => {
+            //                 this.comidasData.push({
+            //                     id: doc.id,
+            //                     titulo: doc.data().titulo,
+            //                     sabor: doc.data().sabor,
+            //                     preco: doc.data().preco,
+            //                     descricao: doc.data().descricao,                        
+            //                     imgItem: doc.data().imgItem,
+            //                     itemTipo: doc.data().itemTipo,
+            //                     editar: doc.data().editar
+            //                 });
+            //                 console.log(doc.id, " => ", doc.data());
+            //             });
+            //         })
+            //         break;
 
-                case "drink":
-                    this.comidasData = [];
-                    db.collection("cardapio").where("itemTipo", "==", "Bebida")
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            this.comidasData.push({
-                                id: doc.id,
-                                titulo: doc.data().titulo,
-                                sabor: doc.data().sabor,
-                                preco: doc.data().preco,
-                                descricao: doc.data().descricao,                        
-                                imgItem: doc.data().imgItem,
-                                itemTipo: doc.data().itemTipo,
-                            });
-                            console.log(doc.id, " => ", doc.data());
-                        });
-                    })
-                    break;
+            //     case "drink":
+            //         this.comidasData = [];
+            //         db.collection("cardapio").where("itemTipo", "==", "Bebida")
+            //         .onSnapshot((querySnapshot) => {
+            //             this.comidasData = [];
+            //             querySnapshot.forEach((doc) => {
+            //                 this.comidasData.push({
+            //                     id: doc.id,
+            //                     titulo: doc.data().titulo,
+            //                     sabor: doc.data().sabor,
+            //                     preco: doc.data().preco,
+            //                     descricao: doc.data().descricao,                        
+            //                     imgItem: doc.data().imgItem,
+            //                     itemTipo: doc.data().itemTipo,
+            //                     editar: doc.data().editar
+            //                 });
+            //                 console.log(doc.id, " => ", doc.data());
+            //             });
+            //         })
+            //         break;
 
-                default:
-                  console.log('Default');
-            } 
+            //     default:
+            //       console.log('Default');
+            // } 
+        }
+    },
+    computed: {
+        // filterAll: function () {
+        //     return this.comidasData.filter(function (fod) {
+        //         return fod.itemTipo == "Bebida";
+        //     })
+        // },
+        filterFood: function () {
+            return this.comidasData.filter(function (foods) {
+                return foods.itemTipo == "Comida";
+            })
         },
+        filterDrink: function () {
+            return this.comidasData.filter(function (drinks) {
+                return drinks.itemTipo == "Bebida";
+            })
+        }
     },
     created() {
-      this.readItem()
-    },  
-    mounted() {
-        setTimeout(() => {
-            this.imageloading = 'Imagem carregada! Veja a prévia'
-        }, 6000);
-    }
+        this.readItem();
+    },
 }
 </script>
 
 <style>
 
 /*--------------- FORM --------------- */
-    #form-pastel {
-        position: absolute;
-        width: 1140px;
-        top: 73.5px;
-        left: 20px;
-        z-index: 2;
-    }
-
-    .start-row {
-        display: grid;
-        grid-template-columns: 460px 480px 160px;
-        grid-column-gap: 20px;
-        height: 40px;
-    }
-
-    .middle-row {
+    .mainteste {
+        /* position: relative; */
+        left: 0;
+        top: 32%;
         width: 100%;
-        padding-top: 20px;
+        height: 100%;
     }
 
-    .end-row {
-        width: 100%;
-        height: 125px;
-        padding-top: 15px;
+    .form-card {
+        position: relative; 
+        width: 62%;
+        min-height: 36%;
+        background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 23.8%, #FFF 0, #FFF 75%);
+        box-shadow: 0px 0px 30px #740B0B45;
+        border-radius: 20px;
+        padding: 1.5% 20px 20px 20px;
+        z-index: 1;
+        margin-bottom: 4%;
+        z-index: 0;
+    }
+
+    .form-card input,
+    .form-card textarea {
+        font-weight: 500;
+        color: #A03400 !important;
     }
 
     input::placeholder,
     textarea::placeholder {        
-        color: #A03400;
-        font: normal normal normal 15.5px/20px Roboto;
-    }
+        color: #A03400 !important;
+        font: normal normal 500 1.4rem/20px Roboto;
+    }    
 
-    .form-card {
-        position: relative;
-        top: -203px;
-        left: 0;
-        width: 1180px;
-        height: 392px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
-        box-shadow: 0px 0px 30px #740B0B45;
-        border-radius: 20px;
-    }
-
-    .form-header {
-        display: flex;
-        position: absolute;
-        width: 100%;    
-        height: 93px;
-        background: #FFCA00 0% 0% no-repeat padding-box;
-        border-radius: 20px 20px 0px 0px;
+    /* Classe do formulário */
+    .form { 
+        padding-top: 0.6%;
+        padding-bottom: 2%;
     }
 
     .text-header {
-        position: absolute;
-        left: 60.5px;
-        top: 25px;
-        font: italic normal bold 22.5px/31px Roboto;
-        letter-spacing: 0.5px;
-        z-index: 2;
+        padding-left: 4%;
+        font: italic normal bold 2rem/2.3rem Roboto;  
     }
 
-    .switch {
-        position: absolute;
-        left: 983px;
-        top: 27%;
-        font: normal normal normal 17px/21px Roboto;
-        letter-spacing: 0px;
-        color: #A03400;
-        z-index: 2;
+    #preco {
+        font: normal normal 500 1.4rem/20px Roboto;
     }
 
     .warning {
-      position: absolute;
-      top: 365px;
-      left: 300px;
-      border: 1px solid red;
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    .warning__errors {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 530px;
-      color: red;
-      font-weight: bold;
-    }
-
-    .warning__errors i {
-      position: absolute;
-      top: -1px;
-      left: -40px;
-      font-size: 30px;
-      color: red;
+        /* position: absolute; */
+        top: 110%;
+        left: 50%;
+        width: 50%;
+        border: 1px solid red;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        color: #E43636;
+        background-color: white;
+        font-weight: bold;        
+        margin-bottom: 3.6%;
     }
 
 /*--------------- CARDS --------------- */
     .card {
-        position: relative;
-        top: 0;
-        left: 0;
-        height: 295px;            
+        /* position: relative;
+        top: 800px;
+        left: 0;*/
+        width: 61.5%;
+        height: 31.5%;  
+        border: 0;           
+        background: transparent radial-gradient(closest-side at 50% 50%, #FFFFFF 0%, #FFFFFF 67%, #FFFFFF00 100%) 0% 0% no-repeat padding-box;
+        
+    }
+
+    .no-item {
+        /* position: absolute; */        
+        width: 100%;
+        text-align: center;
+        color: #cdcdcd;
+        padding-bottom: 2%;
+        background: transparent radial-gradient(closest-side at 50% 50%, #FFFFFF 0%, #FFFFFF 67%, #FFFFFF00 100%) 0% 0% no-repeat padding-box;
+    }
+
+    .no-item i {
+        font-size: 5rem;
     }
 
     .item {
-        position: absolute;
-        top: 0;
-        left: 475px;
-        width: 1070px;
-        height: 221px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
+        position: relative;
+        left: 11%;
+        width: 89%;
+        height: 75.5%;        
+        background: linear-gradient(to bottom, #E43636 0, #E43636 36%, #FFF 0, #FFF 75%);
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
         opacity: 1;
+        margin: 0;
+        margin-bottom: 5%;
     }
 
     .item-header {
-        display: flex;
-        width: 100%;
-        height: 80px;
-        background: #E43636 0% 0% no-repeat padding-box;
-        border-radius: 20px 20px 0px 0px;
-        opacity: 1;
+        padding-right: 8%;
+    }
+
+    .pedido-title {
+        font-weight: bold;
     }
 
     .titulo-pedido {
-        position: absolute;
-        top: 20px;
-        font: italic normal bold 30px/37px Roboto;
+        /* position: absolute; */
+        top: 9%;
+        font: italic normal bold 3rem/4rem Roboto;
         letter-spacing: 0px;
         color: #FFCA00;
-        opacity: 1;
-        padding-left: 110px;
-    }
+        padding-left: 9%;
+        margin-top: 2%;
+        margin-bottom: 4.5%;  
+        }
 
     .preco-pedido {
-        position: absolute;
-        top: 20px;
-        left: 910px;
-        font: italic normal bold 24px/37px Roboto;
+        /* position: absolute; */
+        top: 9%;
+        left: 86%;
+        font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 0px;
-        color: #FFFFFF;
-        opacity: 1;
+        color: #FFFFFF;        
+        margin-top: 2%;
+        margin-bottom: 4.5%;  
     }
 
     .sabor-pedido {
-        position: absolute;
+        /* position: absolute; */
         top: 103px;
         left: 0;
-        text-align: center;
-        font: italic normal bold 23px/37px Roboto;
+        font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 1px;
         color: #A03400;
         opacity: 1;
-        padding-left: 110px;
+        padding-left: 9%;
     }
 
     .pedido-res {
-        font-weight: normal;
+        padding-left: 0.5%;
         font-style: normal;
+        font-weight: 300;
     }
 
     .descricao-pedido {
-        position: absolute;
+        /* position: absolute; */
         top: 155px;
         left: 0;
-        text-align: center;
-        font: italic normal bold 23px/37px Roboto;
+        font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 0px;
         color: #A03400;
         opacity: 1;
-        padding-left: 110px;
+        padding-left: 9%;
+        margin-bottom: 1.5%;
     }
 
     .imagem-item {
         position: absolute;
         top: 50%;
-        left: -110px;
+        left: -12.3%;
         transform: translate(0%, -50%);
-        width: 180px;
-        height: 180px;
+        width: 20.1%;
+        height: auto;
+        width: 17.1%;
+        height: 79.8%;
         background-color: #FFF;
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 10px;
@@ -551,56 +719,50 @@ export default {
     }
 
     .del {
-      position: absolute;
-      top: 90%;
-      left: 98%;
-      border: 0;
-      border-radius: 5px;
-      background-color: #E43636;
-      height: 35px;
-      width: 35px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 20px;
+        position: absolute;
+        top: 90%;
+        left: 98%;
+        border: 0;
+        border-radius: 5px;
+        background-color: #E43636;
+        height: 15.2%;
+        width: 3.3%;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1.5rem;
     }
 
     .del:hover {     
-      border: 1px solid;
-      outline-color: black;
-      outline-offset: 15px;
+        border: 1px solid;
+        outline-color: black;
+        outline-offset: 15px;
     }
 
     .upd {
-      position: absolute;
-      top: 90%;
-      left: 94%;
-      border: 0;
-      border-radius: 5px;
-      background-color: #a7a7a7;
-      height: 35px;
-      width: 35px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        position: absolute;
+        top: 90%;
+        left: 94%;
+        border: 0;
+        border-radius: 5px;
+        background-color: #a7a7a7;
+        height: 15.2%;
+        width: 3.3%;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .upd:hover {
-      border: 1px solid;
-      outline-color: black;
-      outline-offset: 15px;
+        border: 1px solid;
+        outline-color: black;
+        outline-offset: 15px;
     }
 
     #preco {
-      padding-left: 40px;
-    }
-
-    .reais {
-      position: absolute;
-      left: 1000px;
-      top: 10px;
+        color: #A03400 !important;
     }
 
     .upd-btn {
@@ -609,32 +771,73 @@ export default {
 
 /*--------------- UPDATE CARDS --------------- */
 
+    .edit-card input {
+        border: 1px solid #E43636;
+        border-radius: 6px;
+        padding-left: 5px;
+        font: normal normal 500 1.4rem/18px Roboto;
+        color: #000;
+        height: 20px;
+    }
+
+    @media (max-width: 1440px){
+        .edit-card input {
+            height: 18.2px;
+        }
+    }
+
+    @media (max-width: 1024px){
+        .edit-card input {
+            height: 15px;
+        }
+    }
+
+    @media (max-width: 768px){
+        .edit-card input {
+            padding-top: 1px;
+            height: 11px;
+        }
+    }
+
+    @media (max-width: 425px){
+        .edit-card input {
+            height: 8px;
+        }
+    }
+
+        @media (max-width: 320px){
+        .cancel-btn {
+            width: 15%;
+        }
+    }
+    
     .titulo-update {
         position: absolute;
-        top: 60px;
-        left: 110px;
-        width: 500px;
+        top: 27%;
+        left: 9%;
+        width: 30%;        
     }
 
     .preco-update {
         position: absolute;
-        top: 60px;
-        left: 900px;
-        width: 170px;
+        top: 27%;
+        right: 0;
+        width: 20%;
+        height: auto;
     }
 
     .sabor-update {
         position: absolute;
-        top: 135px;
-        left: 110px;
-        width: 500px;
+        top: 63%;
+        left: 9%;
+        width: 50%;
     }
 
     .descricao-update {
         position: absolute;
-        top: 190px;
-        left: 110px;
-        width: 500px;
+        top: 87%;
+        left: 9%;
+        width: 50%;
     }
 
     .input-update {
@@ -663,15 +866,15 @@ export default {
 
     .save-btn {
         position: absolute;
-        top: 199px;
-        left: 920px;
-        width: 78px;
-        height: 35px;
+        top: 88%;
+        right: 10%;
+        width: 13%;
+        height: 17.5%;
         background-color: #4CAF50;
         border: 0;
         color: white;
         text-align: center;
-        font-size: 16px;
+        font-size: 1.6rem;
         cursor: pointer;
         border-radius: 5px;
     }
@@ -682,16 +885,16 @@ export default {
 
     .cancel-btn {
         position: absolute;
-        top: 199px;
-        left: 1005px;
-        width: 79px;
-        height: 35px;
+        top: 88%;
+        right: -3.2%;
+        width: 13%;
+        height: 17.5%;
         z-index: 10;  
         background-color: #c9c9c9;
         border: 0;
         color: black;
         text-align: center;
-        font-size: 16px;
+        font-size: 1.6rem;
         cursor: pointer;
         border-radius: 5px;
     }
@@ -700,20 +903,14 @@ export default {
        background-color: #9d9d9d;
     }
 
-    .edit-card input {
-        border: 1px solid #E43636;
-        border-radius: 6px;
-        padding-left: 5px;
-        font: normal normal normal 16px/18px Roboto;
-    }
-
 /*--------------- INPUT FILE --------------- */
     .dropbox {
+        position: relative;
         height: 100%;
         border: 1px solid #E43636;
         border-radius: 10px;
         opacity: 1;
-        font: normal normal normal 15.7px/21px Roboto;
+        font: normal normal normal 1.4rem/21px Roboto;
         display: flex;
         align-items: center;
         color: #A03400;
@@ -721,83 +918,203 @@ export default {
 
     .dropbox p {
         text-align: center;
-        line-height: 30px;
+        line-height: 25px;
+        display: block;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        font: normal normal 500 1.4rem/20px Roboto;
+    }
+
+    .dropbox img {
+        border: 0;
+        border-radius: 10px;
+        background-color: #FFF;
     }
   
     .input-file {
         opacity: 0;
         position: absolute;
         cursor: pointer;
-        width: 1140px;
-        height: 110px;
+        width: 100%;
+        height: 100%;
     }
 
     .bi.bi-image {
-        font-size: 49px;
+        font-size: 5rem;
         color: #E43636;
     }
 
-/*--------------- MODAL IMG --------------- */
-    .modal {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: rgba(0,0,0,0.8);
-        z-index: 99999;
-        opacity:0;
-        -webkit-transition: opacity 400ms ease-in;
-        -moz-transition: opacity 400ms ease-in;
-        transition: opacity 400ms ease-in;
-        pointer-events: none;
+    .dropbox-over {
+        border: dotted;
     }
 
-    .modal:target {
-        opacity: 1;
-        pointer-events: auto;
+
+/*--------------- SWEET ALERT --------------- */
+    .swal2-popup {
+        font-size: 1.8rem !important;
+    }    
+
+
+/*--------------- @MEDIA --------------- */   
+    @media (max-width: 1024px) {
+        .form-card {            
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 21%, #FFF 0, #FFF 75%);
+        }
+        
     }
 
-    .modal > div {
-        width: 1300px;
-        height: 300px;
-        position: relative;
-        margin: 15% auto;
-        background: #fff;
+    @media (max-width: 768px) {
+        .form-card {            
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19.5%, #FFF 0, #FFF 75%);
+        }
+        
+    }
+    
+    @media (max-width: 575px) {
+        html {
+            font-size: 25.8%;
+        }
+
+        .form-card {     
+            width: 90%;       
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19%, #FFF 0, #FFF 75%);
+        }
+
+        .card {
+            width: 90%;
+        }
+    
+        .item {
+            border-radius: 10px;
+        }
+
+        .titulo-pedido {
+            position: absolute;
+            top: 3.5px;
+            left: 3px;
+            font: italic normal bold 2.5rem/4rem Roboto; 
+        }
+
+        .preco-pedido {
+            font: italic normal bold 2.4rem/4rem Roboto;
+        }
+
+        .imagem-item {
+            height: 65%;
+        }
+
+        .upd {
+            left: 90%;
+            width: 6%;
+        }
+
+        .del {
+            left: 97%;
+            width: 6%;
+        }
     }
 
-    .preview {
-        border-radius: 10px;
-        position: absolute;
-        top: 61px;
-        left: 50px;
+    @media (max-width: 375px) {
+        html {
+            font-size: 25.8%;
+        }
+
+        .form-card {      
+            width: 90%;      
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 17%, #FFF 0, #FFF 75%);
+        }
+
+        .card {
+            width: 90%;
+        }
+
+        .item {
+            border-radius: 10px;
+        }
+
+        .titulo-pedido {
+            position: absolute;
+            top: 3.5px;
+            left: 3px;
+            font: italic normal bold 2.5rem/4rem Roboto; 
+        }
+
+        .preco-pedido {
+            font: italic normal bold 2.1rem/4rem Roboto;
+        }
+
+        .imagem-item {
+            height: 55%;
+        }
+
+        .upd {
+            left: 90%;
+            width: 6%;
+        }
+
+        .del {
+            left: 97%;
+            width: 6%;
+        }
     }
 
-    .fechar {
-        position: absolute;
-        width: 30px;
-        right: -15px;
-        top: -20px;
-        text-align: center;
-        line-height: 30px;
-        margin-top: 5px;
-        background: #ff4545;
-        border-radius: 50%;
-        font-size: 16px;
-        color: #8d0000;
-    }
+    @media (max-width: 320px) {
+        html {
+            font-size: 25.8%;
+        }
 
-    .item-modal {
-        position: absolute;
-        top: 40px;
-        left: 160px;
-        width: 1070px;
-        height: 221px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
-        box-shadow: 0px 0px 30px #740B0B45;
-        border-radius: 20px;
-        opacity: 1;
-    }
+        .form-card {           
+            width: 90%; 
+            background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19%, #FFF 0, #FFF 75%);
+        }
 
+        .card {
+            width: 90%;
+        }
+
+        .item {
+            border-radius: 10px;
+        }
+
+        .titulo-pedido {
+            position: absolute;
+            top: 3.5px;
+            left: 3px;
+            font: italic normal bold 2.5rem/4rem Roboto; 
+        }
+
+        .preco-pedido {            
+            font: italic normal bold 2rem/4rem Roboto;
+        }
+
+        .sabor-pedido {            
+            font: italic normal bold 2rem/4rem Roboto;
+        }
+
+        .descricao-pedido {            
+            font: italic normal bold 2rem/4rem Roboto;
+        }
+
+        .imagem-item {
+            height: 50%;
+        }
+
+        .upd {
+            left: 90%;
+            width: 6%;
+        }
+
+        .del {
+            left: 97%;
+            width: 6%;
+        }
+
+        .titulo-update {
+            top: 25%;
+        }
+
+        .preco-update {
+            top: 25%;
+        }
+    }
 </style>

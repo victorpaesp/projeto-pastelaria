@@ -13,3 +13,41 @@ input {
 a {
     text-decoration: none;
 }
+
+body, .container {
+    height: 100%;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.6rem;
+}
+
+@media (max-width: 1024px) {
+    html {
+        font-size: 50%;
+    }
+}
+
+
+@media (max-width: 768px) {
+    html {
+        font-size: 38%;
+    }
+}
+
+@media (max-width: 425px) {
+    html {
+        font-size: 25.8%;
+    }
+}
+
+
+@media (max-width: 320px) {
+    html {
+        font-size: 25.8%;
+    }
+}

@@ -1,8 +1,8 @@
 <template>
-    <div class="app">
+    <div class="container-fluid">
         <Background />
-        <Formulario />    
-    </div>
+        <Formulario />        
+    </div> 
 </template>
 
 <script>
@@ -19,11 +19,12 @@ export default {
 </script>
 
 <style>
-    .app {
-        position: relative;
-        top: 0px;
-        left: 8px;
-        width: 1920px;
-        background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box;
+    .container-fluid {   
+        position: relative;  
+        max-width: 1921px;
+        min-height: 100%;
+        padding: 0;    
+        background: transparent url('../assets/img/patterns/pattern-1.png') 0% 0% padding-box ; 
+        z-index: 1;       
     }
 </style>

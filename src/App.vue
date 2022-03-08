@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style>
-    html {
-      background-color: #FFF;
+    body, html{
+        height: 100%;  
     }
 </style>
