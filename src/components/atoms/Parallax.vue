@@ -15,14 +15,14 @@ export default {
 </script>
 
 <style scoped>  
+
     .parallax-img {
         position: absolute;
-        top: 0%;
-        left: 0;
-        z-index: 0;
+        top: -350px;
+        left: -350px;
+        z-index: -1;
         height: 100vh;
         width: 100%;
-        max-width: 100%;
     }
 
     @media (min-width: 1800px) {

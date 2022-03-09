@@ -20,9 +20,6 @@ export default {
         color: #A03400;
         border: 0;
         border-radius: 30px;
-        text-align: center;
-        letter-spacing: 0;
-        padding-top: 3px;
         font: normal normal 900 1.5rem/26px Roboto;
         cursor: pointer;
         display: flex;
@@ -32,8 +29,14 @@ export default {
 
     .submit-btn:hover {
         border: 2px solid transparent;
-        outline-color: black;
-        outline-offset: 15px;
+    }
+
+    @media (max-width: 1024px) {
+        .submit-btn {
+            top: 94.5%;
+            height: 11%;            
+            font-size: 1.5rem;
+        }
     }
 
     @media (max-width: 768px) {

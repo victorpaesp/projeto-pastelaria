@@ -20,11 +20,7 @@ export default {
         color: #FFFFFF;
         border: 0;
         border-radius: 30px;
-        opacity: 1;
-        text-align: center;
-        letter-spacing: 0;
-        padding-top: 3px;
-        font: normal normal 900 1.5rem/26px Roboto;
+        font: normal normal 900 1.5rem Roboto;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -33,8 +29,14 @@ export default {
 
     .clear-btn:hover {
         border: 2px solid transparent;
-        outline-color: black;
-        outline-offset: 15px;
+    }
+
+    @media (max-width: 1024px) {
+        .clear-btn {
+            top: 94.5%;
+            height: 11%;            
+            font-size: 1.5rem;
+        }
     }
 
     @media (max-width: 768px) {

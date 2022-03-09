@@ -1,9 +1,9 @@
 <template>
-    <div class="mainteste">
+    <div class="main-form">
 
         <!-- Card -->
         <div class="form-card">
-
+            <Parallax />
             <!-- Card Header -->
             <div class="row d-flex flex-wrap-reverse">
                 <div class="col-sm-9 text-header mb-2">                        
@@ -43,6 +43,7 @@
                     </div>                    
                 </div>
 
+                <!-- Input area -->
                 <div class="row mt-4">
                     <div class="col">
                         <div :class="['form-group dropbox', dragging ? 'dropbox-over' : 'form-group dropbox']" 
@@ -100,6 +101,8 @@
         <div v-if="this.filtro == 'all'">
             <div class="card" v-for="comida in comidasData" :key="comida.id">
                 <div class="item">
+                    <div class="itemTipo" v-if="comida.itemTipo == 'Comida'" ><i class="fa-solid fa-utensils"></i></div>                   
+                    <div class="itemTipo" v-if="comida.itemTipo == 'Bebida'" ><i class="fa-solid fa-whiskey-glass tryu"></i></div>
                     <div class="item-header row d-flex">
                         <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
                         <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
@@ -113,7 +116,7 @@
                     <div class="descricao-pedido row d-flex">
                         <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
                     </div>       
-                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-icon"></i></button>
 
                     <!-- Área de edição dos itens -->
                     <div class="edit-card" v-if="comida.editar == true">
@@ -136,7 +139,9 @@
         <!-- Filtrado (apenas comidas) -->
         <div v-if="this.filtro == 'food'">
             <div class="card" v-for="comida in filterFood" :key="comida.id">
-                <div class="item">
+                <div class="item">                    
+                    <div class="itemTipo" v-if="comida.itemTipo == 'Comida'" ><i class="fa-solid fa-utensils"></i></div>                   
+                    <div class="itemTipo" v-if="comida.itemTipo == 'Bebida'" ><i class="fa-solid fa-whiskey-glass"></i></div>
                     <div class="item-header row d-flex">
                         <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
                         <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
@@ -150,7 +155,7 @@
                     <div class="descricao-pedido row d-flex">
                         <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
                     </div>       
-                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-icon"></i></button>
 
                     <!-- Área de edição dos itens -->
                     <div class="edit-card" v-if="comida.editar == true">
@@ -174,6 +179,8 @@
         <div v-if="this.filtro == 'drink'">
             <div class="card" v-for="comida in filterDrink" :key="comida.id">
                 <div class="item">
+                    <div class="itemTipo" v-if="comida.itemTipo == 'Comida'" ><i class="fa-solid fa-utensils"></i></div>                   
+                    <div class="itemTipo" v-if="comida.itemTipo == 'Bebida'" ><i class="fa-solid fa-whiskey-glass"></i></div>
                     <div class="item-header row d-flex">
                         <p class="titulo-pedido col-sm-9">"{{ comida.titulo }}"</p>
                         <p class="preco-pedido col-sm-3" style="text-align: end;">{{ comida.preco }}</p>
@@ -187,7 +194,7 @@
                     <div class="descricao-pedido row d-flex">
                         <p class="pedido-title">Descrição: <span class="pedido-res">{{ comida.descricao }}</span></p>  
                     </div>       
-                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-btn"></i></button>
+                    <button class="upd" @click="editItem(comida.id)"><i class="bi bi-pencil-square upd-icon"></i></button>
 
                     <!-- Área de edição dos itens -->
                     <div class="edit-card" v-if="comida.editar == true">
@@ -211,6 +218,8 @@
 </template>
 
 <script>
+
+import Parallax from '@/components/atoms/Parallax.vue';
 import ClearButton from '@/components/atoms/ClearButton.vue';
 import SubmitButton from '@/components/atoms/SubmitButton.vue';
 import Input from '@/components/atoms/Input.vue';
@@ -266,6 +275,7 @@ export default {
         money: VMoney
     },
     components: {
+        Parallax,
         Input,
         Textarea,
         ClearButton,
@@ -447,81 +457,11 @@ export default {
                 console.log(doc.id, " => ", doc.data());
                 });
             })
-            // switch (this.filtro) {
-
-            //     case "all": 
-            //         this.comidasData = [];
-            //         db.collection("cardapio")
-            //         .onSnapshot((querySnapshot) => {
-            //             this.comidasData = [];
-            //             querySnapshot.forEach((doc) => {
-            //                 this.comidasData.push({
-            //                     id: doc.id,
-            //                     titulo: doc.data().titulo,
-            //                     sabor: doc.data().sabor,
-            //                     preco: doc.data().preco,
-            //                     descricao: doc.data().descricao,                        
-            //                     imgItem: doc.data().imgItem,
-            //                     itemTipo: doc.data().itemTipo,
-            //                     editar: doc.data().editar
-            //                 });
-            //             console.log(doc.id, " => ", doc.data());
-            //             });
-            //         })
-            //         break;
-
-            //     case "food":
-            //         this.comidasData = [];
-            //         db.collection("cardapio").where("itemTipo", "==", "Comida")
-            //         .onSnapshot((querySnapshot) => {
-            //             this.comidasData = [];
-            //             querySnapshot.forEach((doc) => {
-            //                 this.comidasData.push({
-            //                     id: doc.id,
-            //                     titulo: doc.data().titulo,
-            //                     sabor: doc.data().sabor,
-            //                     preco: doc.data().preco,
-            //                     descricao: doc.data().descricao,                        
-            //                     imgItem: doc.data().imgItem,
-            //                     itemTipo: doc.data().itemTipo,
-            //                     editar: doc.data().editar
-            //                 });
-            //                 console.log(doc.id, " => ", doc.data());
-            //             });
-            //         })
-            //         break;
-
-            //     case "drink":
-            //         this.comidasData = [];
-            //         db.collection("cardapio").where("itemTipo", "==", "Bebida")
-            //         .onSnapshot((querySnapshot) => {
-            //             this.comidasData = [];
-            //             querySnapshot.forEach((doc) => {
-            //                 this.comidasData.push({
-            //                     id: doc.id,
-            //                     titulo: doc.data().titulo,
-            //                     sabor: doc.data().sabor,
-            //                     preco: doc.data().preco,
-            //                     descricao: doc.data().descricao,                        
-            //                     imgItem: doc.data().imgItem,
-            //                     itemTipo: doc.data().itemTipo,
-            //                     editar: doc.data().editar
-            //                 });
-            //                 console.log(doc.id, " => ", doc.data());
-            //             });
-            //         })
-            //         break;
-
-            //     default:
-            //       console.log('Default');
-            // } 
         }
     },
     computed: {
         // filterAll: function () {
-        //     return this.comidasData.filter(function (fod) {
-        //         return fod.itemTipo == "Bebida";
-        //     })
+        //     return this.comidasData
         // },
         filterFood: function () {
             return this.comidasData.filter(function (foods) {
@@ -543,10 +483,7 @@ export default {
 <style>
 
 /*--------------- FORM --------------- */
-    .mainteste {
-        /* position: relative; */
-        left: 0;
-        top: 32%;
+    .main-form {
         width: 100%;
         height: 100%;
     }
@@ -561,7 +498,6 @@ export default {
         padding: 1.5% 20px 20px 20px;
         z-index: 1;
         margin-bottom: 4%;
-        z-index: 0;
     }
 
     .form-card input,
@@ -573,12 +509,11 @@ export default {
     input::placeholder,
     textarea::placeholder {        
         color: #A03400 !important;
-        font: normal normal 500 1.4rem/20px Roboto;
+        font: normal normal 500 1.4rem Roboto;
     }    
 
-    /* Classe do formulário */
     .form { 
-        padding-top: 0.6%;
+        padding-top: 0.8%;
         padding-bottom: 2%;
     }
 
@@ -592,9 +527,6 @@ export default {
     }
 
     .warning {
-        /* position: absolute; */
-        top: 110%;
-        left: 50%;
         width: 50%;
         border: 1px solid red;
         padding: 10px;
@@ -608,18 +540,13 @@ export default {
 
 /*--------------- CARDS --------------- */
     .card {
-        /* position: relative;
-        top: 800px;
-        left: 0;*/
         width: 61.5%;
         height: 31.5%;  
         border: 0;           
         background: transparent radial-gradient(closest-side at 50% 50%, #FFFFFF 0%, #FFFFFF 67%, #FFFFFF00 100%) 0% 0% no-repeat padding-box;
-        
     }
 
-    .no-item {
-        /* position: absolute; */        
+    .no-item {       
         width: 100%;
         text-align: center;
         color: #cdcdcd;
@@ -639,49 +566,33 @@ export default {
         background: linear-gradient(to bottom, #E43636 0, #E43636 36%, #FFF 0, #FFF 75%);
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 20px;
-        opacity: 1;
         margin: 0;
         margin-bottom: 5%;
     }
 
     .item-header {
-        padding-right: 8%;
-    }
-
-    .pedido-title {
-        font-weight: bold;
+        padding-right: 6%;
     }
 
     .titulo-pedido {
-        /* position: absolute; */
-        top: 9%;
         font: italic normal bold 3rem/4rem Roboto;
-        letter-spacing: 0px;
         color: #FFCA00;
         padding-left: 9%;
         margin-top: 2%;
         margin-bottom: 4.5%;  
-        }
+    }
 
     .preco-pedido {
-        /* position: absolute; */
-        top: 9%;
-        left: 86%;
         font: italic normal bold 2.2rem/4rem Roboto;
-        letter-spacing: 0px;
         color: #FFFFFF;        
         margin-top: 2%;
         margin-bottom: 4.5%;  
     }
 
     .sabor-pedido {
-        /* position: absolute; */
-        top: 103px;
-        left: 0;
         font: italic normal bold 2.2rem/4rem Roboto;
         letter-spacing: 1px;
         color: #A03400;
-        opacity: 1;
         padding-left: 9%;
     }
 
@@ -692,13 +603,8 @@ export default {
     }
 
     .descricao-pedido {
-        /* position: absolute; */
-        top: 155px;
-        left: 0;
         font: italic normal bold 2.2rem/4rem Roboto;
-        letter-spacing: 0px;
         color: #A03400;
-        opacity: 1;
         padding-left: 9%;
         margin-bottom: 1.5%;
     }
@@ -708,14 +614,28 @@ export default {
         top: 50%;
         left: -12.3%;
         transform: translate(0%, -50%);
-        width: 20.1%;
-        height: auto;
         width: 17.1%;
         height: 79.8%;
         background-color: #FFF;
         box-shadow: 0px 0px 30px #740B0B45;
         border-radius: 10px;
-        opacity: 1;
+    }
+
+    .itemTipo {
+        position: absolute;
+        top: -9%;
+        left: 98%;
+        border: 0;
+        border-radius: 100%;
+        background-color: #FFCA00;
+        height: 19.2%;
+        width: 4.3%;
+        cursor: pointer;
+        color: #A03400 !important;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-items: center;
     }
 
     .del {
@@ -734,8 +654,6 @@ export default {
 
     .del:hover {     
         border: 1px solid;
-        outline-color: black;
-        outline-offset: 15px;
     }
 
     .upd {
@@ -750,27 +668,21 @@ export default {
         cursor: pointer;
         color: #fff;
         font-size: 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .upd:hover {
         border: 1px solid;
-        outline-color: black;
-        outline-offset: 15px;
     }
 
     #preco {
         color: #A03400 !important;
     }
 
-    .upd-btn {
-      color: #FFF;
+    .upd-icon {
+        color: #FFF;
     }
 
 /*--------------- UPDATE CARDS --------------- */
-
     .edit-card input {
         border: 1px solid #E43636;
         border-radius: 6px;
@@ -804,12 +716,6 @@ export default {
             height: 8px;
         }
     }
-
-        @media (max-width: 320px){
-        .cancel-btn {
-            width: 15%;
-        }
-    }
     
     .titulo-update {
         position: absolute;
@@ -823,7 +729,6 @@ export default {
         top: 27%;
         right: 0;
         width: 20%;
-        height: auto;
     }
 
     .sabor-update {
@@ -840,15 +745,15 @@ export default {
         width: 50%;
     }
 
-    .input-update {
+    /* .input-update {
         opacity: 0;
         position: absolute;
         cursor: pointer;
         width: 180px;
         height: 180px;
-    }
+    } */
 
-    .dropbox-update {   
+    /* .dropbox-update {   
         position: absolute;
         left: -110px;
         top: 21px;
@@ -857,12 +762,11 @@ export default {
         height: 180px;   
         border: 1px solid #E43636;
         border-radius: 10px;
-        opacity: 1;
         font: normal normal normal 15.7px/21px Roboto;
         display: flex;
         align-items: center;
         color: #A03400;
-    }
+    } */
 
     .save-btn {
         position: absolute;
@@ -900,7 +804,7 @@ export default {
     }
 
     .cancel-btn:hover {
-       background-color: #9d9d9d;
+        background-color: #9d9d9d;
     }
 
 /*--------------- INPUT FILE --------------- */
@@ -955,17 +859,37 @@ export default {
     }    
 
 
-/*--------------- @MEDIA --------------- */   
+/*--------------- @MEDIA --------------- */  
+
+    @media (max-width: 1440px) {
+        .itemTipo {   
+            left: 97.5%;         
+            width: 5%;
+        }
+        
+    } 
+
     @media (max-width: 1024px) {
         .form-card {            
             background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 21%, #FFF 0, #FFF 75%);
         }
-        
+
+        .itemTipo {   
+            top: -8%;         
+            width: 5%;
+        }
     }
 
     @media (max-width: 768px) {
         .form-card {            
             background: linear-gradient(to bottom, #FFCA00 0, #FFCA00 19.5%, #FFF 0, #FFF 75%);
+        }
+        
+        .itemTipo {   
+            top: -7%;
+            left: 96.5%;         
+            width: 6%;
+            height: 22%;
         }
         
     }
@@ -1012,6 +936,12 @@ export default {
             left: 97%;
             width: 6%;
         }
+        
+        input::placeholder,
+        textarea::placeholder,
+        #preco {       
+            font-size: 2rem;
+        }    
     }
 
     @media (max-width: 375px) {
@@ -1056,6 +986,12 @@ export default {
             left: 97%;
             width: 6%;
         }
+        
+        input::placeholder,
+        textarea::placeholder,
+        #preco {       
+            font-size: 2rem;
+        }    
     }
 
     @media (max-width: 320px) {
@@ -1116,5 +1052,11 @@ export default {
         .preco-update {
             top: 25%;
         }
+
+        input::placeholder,
+        textarea::placeholder,
+        #preco {       
+            font-size: 1.8rem;
+        }   
     }
 </style>

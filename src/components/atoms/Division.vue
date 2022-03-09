@@ -27,24 +27,16 @@ export default {
         margin: 0;
     }
 
-    .division__left-line {
-        left: 0;
-    }
-
-    .division__right-line {
-        left: 0;
-    }
-
     .division__text-center {
         text-align: center;
-        font: italic normal bold 2.3rem/29px Roboto;
+        font: italic normal bold 2.3rem Roboto;
         color: #A03400;
     }
 
     @media (max-width: 575px) {
         .division__text-center {
             text-align: center;
-            font: italic normal bold 1.9rem/29px Roboto;
+            font-size: 1.9rem;
             color: #A03400;
             width: 34%;
         }
@@ -52,8 +44,8 @@ export default {
 
     @media (max-width: 375px) {
         .division__text-center {
-            text-align: center;
-            font: italic normal bold 1.4rem/29px Roboto;
+            text-align: center;            
+            font-size: 1.9rem; 
             color: #A03400;
             width: 34%;
         }
@@ -62,7 +54,7 @@ export default {
     @media (max-width: 320px) {
         .division__text-center {
             text-align: center;
-            font: italic normal bold 1.4rem/29px Roboto;
+            font-size: 1.9rem;
             color: #A03400;
             width: 34%;
         }

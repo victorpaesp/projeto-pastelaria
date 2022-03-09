@@ -1,13 +1,33 @@
 <template>
-    <label :class="{'active': itemComida}" class="toggle-btn">
-        <span v-if="!itemComida" class="ativo">Comida</span>
-        <span v-else>Comida</span>
+    <label :class="{'active': itemStatus}" class="toggle-btn">
+        <span v-if="!itemStatus" class="ativo"> 
+            <div class="item-label">
+                <i class="fa-solid fa-utensils"></i>
+                Comida 
+            </div>
+        </span>
+        <span v-else>
+            <div class="item-label">
+                <i class="fa-solid fa-utensils"></i>
+                Comida
+            </div>
+        </span>
 
         <input type="checkbox" v-model="checkedValue">
         <span class="toggle-btn__switch"></span>
 
-        <span v-if="itemComida" class="ativo">Bebida</span>
-        <span v-else>Bebida</span>
+        <span v-if="itemStatus" class="ativo">
+            <div class="item-label">
+                <i class="fa-solid fa-whiskey-glass"></i>
+                Bebida 
+            </div>
+        </span>
+        <span v-else>
+            <div class="item-label">
+                <i class="fa-solid fa-whiskey-glass"></i>
+                Bebida
+            </div>
+        </span>
     </label>
 </template>
 
@@ -29,7 +49,7 @@ export default {
         }
     },
     computed: {
-        itemComida() {
+        itemStatus() {
             return this.currentState;
         },
         checkedValue: {
@@ -48,11 +68,11 @@ export default {
 <style scoped>
     label {
         font-weight: 300;
+        display: flex;
+        text-align: center;
     }
 
     .toggle-btn {
-        vertical-align: middle;
-        user-select: none;
         cursor: pointer;
     }
     .toggle-btn input[type="checkbox"] {
@@ -62,15 +82,15 @@ export default {
         height: 1px;
     }
     .toggle-btn .toggle-btn__switch {
-        display:inline-block;
-        height:12px;
+        display: block;
+        height: 12px;
         border-radius:6px;
         width: 40px;
         background: #FFFFFF;
         box-shadow: inset 0 0 1px #FFFFFF;
-        position:relative;
+        position: relative;
         margin-left: 10px;
-        transition: all .25s;
+        top: 4px;
     }
     .toggle-btn .toggle-btn__switch::after, 
     .toggle-btn .toggle-btn__switch::before {
@@ -97,20 +117,74 @@ export default {
         background: #FFFFFF;
         box-shadow: inset 0 0 1px #FFFFFF;
     }
-    .active .toggle-btn__switch::after,
-    .active .toggle-btn__switch::before{
-        transform:translateX(40px - 18px);
-    }
     .active .toggle-btn__switch::after {
         left: 23px;
         background: #E33535;
         box-shadow: 0 0 1px #E33535;
     }
-    .toggle-btn__switch {
-        margin-right: 10px;
-    }
 
     .ativo {
         font-weight: bold;
+    }
+
+    @media (max-width: 1440px){
+        .toggle-btn__switch {
+            margin-right: 10px;
+        }
+    }
+
+    @media (max-width: 1024px){
+        .active .toggle-btn__switch::after {
+            height: 18px;
+            width: 17px;
+            left: 17px;
+        }
+
+        .toggle-btn .toggle-btn__switch::after {
+            width: 15px;
+            height: 17px;
+        }        
+
+        .toggle-btn .toggle-btn__switch {
+            height: 10px;
+            top: 10px;
+        }
+    }
+
+    @media (max-width: 768px){
+        .active .toggle-btn__switch::after {
+            height: 18px;
+            width: 17px;
+            left: 14px;
+        }
+
+        .toggle-btn .toggle-btn__switch::after {
+            width: 10px;
+            height: 10px;
+        }        
+
+        .toggle-btn .toggle-btn__switch {
+            height: 5px;
+            top: 8px;
+        }
+    }
+
+    @media (max-width: 425px){
+        .active .toggle-btn__switch::after {
+            height: 18px;
+            width: 17px;
+            left: 16px;
+        }
+
+        .toggle-btn .toggle-btn__switch::after {
+            width: 10px;
+            height: 10px;
+        }        
+
+        .toggle-btn .toggle-btn__switch {
+            width: 25px;
+            height: 5px;
+            top: 0px;
+        }
     }
 </style>
