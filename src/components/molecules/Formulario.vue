@@ -635,7 +635,6 @@ export default {
         background-color: #FFCA00;
         height: 19.2%;
         width: 4.3%;
-        cursor: pointer;
         color: #A03400 !important;
         font-size: 1.5rem;
         display: flex;
