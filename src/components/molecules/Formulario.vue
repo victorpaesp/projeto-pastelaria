@@ -88,17 +88,14 @@
 
 
         <FilterButton @input="readItem" v-model="filtro"/>
-
-
-        <!-- Card de item adicionado -->
-        <div class="no-item" v-if="!comidasData.length">
-            <i class="bi bi-search"></i>
-            <h3>Nenhum item cadastrado</h3>
-        </div>
-
+        
 
         <!-- Todos os itens -->
         <div v-if="this.filtro == 'all'">
+            <div class="no-item" v-if="!comidasData.length">
+            <i class="bi bi-search"></i>
+            <h3>Nenhum item cadastrado</h3>
+        </div>
             <div class="card" v-for="comida in comidasData" :key="comida.id">
                 <div class="item">
                     <div class="itemTipo" v-if="comida.itemTipo == 'Comida'" ><i class="fa-solid fa-utensils"></i></div>                   
@@ -137,7 +134,11 @@
         </div>
 
         <!-- Filtrado (apenas comidas) -->
-        <div v-if="this.filtro == 'food'">
+            <div v-if="this.filtro == 'food'">
+                <div class="no-item" v-if="!filterFood.length">
+                <i class="bi bi-search"></i>
+                <h3>Nenhum item cadastrado</h3>
+            </div>
             <div class="card" v-for="comida in filterFood" :key="comida.id">
                 <div class="item">                    
                     <div class="itemTipo" v-if="comida.itemTipo == 'Comida'" ><i class="fa-solid fa-utensils"></i></div>                   
@@ -176,8 +177,12 @@
         </div>
 
         <!-- Filtrado (apenas bebidas) -->
-        <div v-if="this.filtro == 'drink'">
-            <div class="card" v-for="comida in filterDrink" :key="comida.id">
+            <div v-if="this.filtro == 'drink'">
+                <div class="no-item" v-if="!filterDrink.length">
+                <i class="bi bi-search"></i>
+                <h3>Nenhum item cadastrado</h3>
+            </div>
+            <div class="card" v-else v-for="comida in filterDrink" :key="comida.id">
                 <div class="item">
                     <div class="itemTipo" v-if="comida.itemTipo == 'Comida'" ><i class="fa-solid fa-utensils"></i></div>                   
                     <div class="itemTipo" v-if="comida.itemTipo == 'Bebida'" ><i class="fa-solid fa-whiskey-glass"></i></div>
